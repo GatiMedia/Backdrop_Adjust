@@ -21,9 +21,12 @@ def create_BD_Adj():
 
         y_Height = (float(y_Max) - float(y_Min))
 
+        #TODO fix empty list problem
         if not z_List:
             z_List.append(0)
         z_Min = min(z_List)
+
+        #TODO add darker tile color part
 
         bd_this = nuke.createNode('Backdrop_Adjust')
 
@@ -35,6 +38,7 @@ def create_BD_Adj():
         bd_this.hideControlPanel()
     else:
         bd_that = nuke.createNode('Backdrop_Adjust')
+        bd_that['tile_color'].setValue(1717987071)
         bd_that['z_order'].setValue(0)
         bd_that.hideControlPanel()
 

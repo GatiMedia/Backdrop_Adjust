@@ -7,7 +7,7 @@ def create_BD_Adj():
             try:
                 node_Xpos.append(s['xpos'].value())
                 node_Ypos.append(s['ypos'].value())
-                z_list.append(s['z_order'].value())
+                z_List.append(s['z_order'].value())
             except:
                 pass
 
@@ -21,7 +21,6 @@ def create_BD_Adj():
 
         y_Height = (float(y_Max) - float(y_Min))
 
-        #TODO fix empty list problem
         if not z_List:
             z_List.append(0)
         z_Min = min(z_List)

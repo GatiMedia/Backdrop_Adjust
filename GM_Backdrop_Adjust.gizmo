@@ -1,36 +1,37 @@
 BackdropNode {
- inputs 0
- name Backdrop_Adjust
- tile_color 0x777777ff
- label "<center><font color=\[value note_color]>\[value note]"
- note_font "Bitstream Vera Sans Bold"
- note_font_size 42
- selected true
- xpos 2188
- ypos 143
- bdwidth 500
- bdheight 500
- addUserKnob {20 User}
- addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "node_xpos = \[]\nnode_ypos = \[]\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n    \n    x_max = max(node_xpos)\n    x_min = min(node_xpos)\n    \n    x_width = (float(x_max) - float(x_min))\n    print (x_width)\n    \n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n    \n    y_height = (float(y_max) - float(y_min))\n    print (y_height)\n    \n    bd = nuke.thisNode()\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width+300)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height+300)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
- addUserKnob {26 label_1 l <b>Label}
- addUserKnob {1 note l Note}
- note Text
- addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
- addUserKnob {26 font_size l "Note size"}
- addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10" -STARTLINE T "curr_size = nuke.thisNode()\['note_font_size'].value()\n\nnuke.thisNode()\['note_font_size'].setValue(curr_size+10)\n\nnew_size =  int(curr_size + 10)\n\nprint ('\\n The new font size is ' + str(new_size))"}
- addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10" -STARTLINE T "curr_size = nuke.thisNode()\['note_font_size'].value()\n\nnuke.thisNode()\['note_font_size'].setValue(curr_size-10)\n\nnew_size =  int(curr_size - 10)\n\nprint ('\\n The new font size is ' + str(new_size))"}
- addUserKnob {26 resize l "<b>Re Size"}
- addUserKnob {26 y l Height}
- addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100" T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+100)\n\nnew_height =  int(curr_height + 100)\n\nprint ('\\n The new height is ' + str(new_height))\n" +STARTLINE}
- addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500" -STARTLINE T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+500)\n\nnew_height = int(curr_height + 500)\n\nprint ('\\n The new height is ' + str(new_height))\n"}
- addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100" T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height-100)\n\nnew_height = int(curr_height - 100)\n\nprint ('\\n The new height is ' + str(new_height))\n" +STARTLINE}
- addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500" -STARTLINE T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height-500)\n\nnew_height = int(curr_height - 500)\n\nprint ('\\n The new height is ' + str(new_height))"}
- addUserKnob {26 x l Width}
- addUserKnob {22 add_x_100 l "<font color=orange>Add X 100" T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width+100)\n\nnew_width =  int(curr_width + 100)\n\nprint ('\\n The new width is ' + str(new_width))\n\n" +STARTLINE}
- addUserKnob {22 add_x_500 l "<font color=orange>Add X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width+500)\n\nnew_width =  int(curr_width + 500)\n\nprint ('\\n The new width is ' + str(new_width))"}
- addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100" T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-100)\n\nnew_width =  int(curr_width - 100)\n\nprint ('\\n The new width is ' + str(new_width))" +STARTLINE}
- addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-500)\n\nnew_width =  int(curr_width - 500)\n\nprint ('\\n The new width is ' + str(new_width))"}
- addUserKnob {26 ""}
- addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.01 version</font>"}
- addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}
+inputs 0
+name Backdrop_Adjust
+tile_color 0x666666ff
+label "<center><font color=\[value note_color]>\[value note]"
+note_font "Bitstream Vera Sans Bold Bold"
+note_font_size 72
+selected true
+xpos 3958
+ypos -3816
+bdwidth 500
+bdheight 500
+z_order -250000
+addUserKnob {20 User}
+addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "node_xpos = \[]\nnode_ypos = \[]\nz_list = \[]\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        try:\n            node_xpos.append(s\['xpos'].value())\n            node_ypos.append(s\['ypos'].value())\n            z_list.append(s\['z_order'].value())\n        except:\n            pass\n    \n    x_max = max(node_xpos)\n    x_min = min(node_xpos)\n    \n    x_width = (float(x_max) - float(x_min))\n    print (x_width)\n    \n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n    \n    y_height = (float(y_max) - float(y_min))\n    print (y_height)\n    \n    if not z_list:\n        z_list.append(0)\n    z_min = min(z_list)\n\n    bd = nuke.thisNode()\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width+300)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height+300)\n    bd\['z_order'].setValue(z_min - 1)\nelse:\n    nuke.message('<font color=orange><b>Select some nodes first!')" +STARTLINE}
+addUserKnob {26 label_1 l <b>Label}
+addUserKnob {1 note l Note}
+note Text
+addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
+addUserKnob {26 font_size l "Note size"}
+addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10" -STARTLINE T "curr_size = nuke.thisNode()\['note_font_size'].value()\n\nnuke.thisNode()\['note_font_size'].setValue(curr_size+10)\n\nnew_size =  int(curr_size + 10)\n\nprint ('\\n The new font size is ' + str(new_size))"}
+addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10" -STARTLINE T "curr_size = nuke.thisNode()\['note_font_size'].value()\n\nnuke.thisNode()\['note_font_size'].setValue(curr_size-10)\n\nnew_size =  int(curr_size - 10)\n\nprint ('\\n The new font size is ' + str(new_size))"}
+addUserKnob {26 resize l "<b>Re Size"}
+addUserKnob {26 y l Height}
+addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100" T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+100)\n\nnew_height =  int(curr_height + 100)\n\nprint ('\\n The new height is ' + str(new_height))\n" +STARTLINE}
+addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500" -STARTLINE T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+500)\n\nnew_height = int(curr_height + 500)\n\nprint ('\\n The new height is ' + str(new_height))\n"}
+addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100" T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height-100)\n\nnew_height = int(curr_height - 100)\n\nprint ('\\n The new height is ' + str(new_height))\n" +STARTLINE}
+addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500" -STARTLINE T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height-500)\n\nnew_height = int(curr_height - 500)\n\nprint ('\\n The new height is ' + str(new_height))"}
+addUserKnob {26 x l Width}
+addUserKnob {22 add_x_100 l "<font color=orange>Add X 100" T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width+100)\n\nnew_width =  int(curr_width + 100)\n\nprint ('\\n The new width is ' + str(new_width))\n\n" +STARTLINE}
+addUserKnob {22 add_x_500 l "<font color=orange>Add X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width+500)\n\nnew_width =  int(curr_width + 500)\n\nprint ('\\n The new width is ' + str(new_width))"}
+addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100" T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-100)\n\nnew_width =  int(curr_width - 100)\n\nprint ('\\n The new width is ' + str(new_width))" +STARTLINE}
+addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-500)\n\nnew_width =  int(curr_width - 500)\n\nprint ('\\n The new width is ' + str(new_width))"}
+addUserKnob {26 ""}
+addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.01 version</font>"}
+addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}
 }

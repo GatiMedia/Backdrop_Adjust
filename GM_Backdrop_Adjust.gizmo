@@ -6,16 +6,15 @@ BackdropNode {
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42
  selected true
- xpos 3160
- ypos -992
- bdwidth 520
- bdheight 524
- z_order -1
+ xpos 3150
+ ypos -982
+ bdwidth 500
+ bdheight 500
  addUserKnob {20 User}
  addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "node_xpos = \[]\nnode_ypos = \[]\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n    \n    x_max = max(node_xpos)\n    x_min = min(node_xpos)\n    \n    x_width = (float(x_max) - float(x_min))\n    print (x_width)\n    \n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n    \n    y_height = (float(y_max) - float(y_min))\n    print (y_height)\n    \n    bd = nuke.thisNode()\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width+300)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height+300)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
  addUserKnob {26 label_1 l <b>Label}
  addUserKnob {1 note l Note}
- note Text
+ note -
  addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
  addUserKnob {26 font_size l "Note size"}
  addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10" -STARTLINE T "curr_size = nuke.thisNode()\['note_font_size'].value()\n\nnuke.thisNode()\['note_font_size'].setValue(curr_size+10)\n\nnew_size =  int(curr_size + 10)\n\nprint ('\\n The new font size is ' + str(new_size))"}

@@ -1,7 +1,6 @@
 BackdropNode {
  inputs 0
  name Backdrop_Adjust
- tile_color 0x666666ff
  label "<center><font color=\[value note_color]>\[value note]\n\n\n"
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42

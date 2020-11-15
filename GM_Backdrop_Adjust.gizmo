@@ -30,18 +30,18 @@ BackdropNode {
  addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100" T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-100)\n\nnew_width =  int(curr_width - 100)\n\nprint ('\\n The new width is ' + str(new_width))" +STARTLINE}
  addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-500)\n\nnew_width =  int(curr_width - 500)\n\nprint ('\\n The new width is ' + str(new_width))"}
  addUserKnob {26 node_color l "<b>Node Color"}
- addUserKnob {22 red l "<font color=#D2654D>█" T "nuke.thisNode()\['tile_color'].setValue(2134851583)" +STARTLINE}
- addUserKnob {22 pink l "<font color=#D265AD>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2134861567)"}
- addUserKnob {22 purple l "<font color=#B473A3>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1916764159)"}
- addUserKnob {22 blue l "<font color=#8291D3>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1062830079)"}
- addUserKnob {22 cyan l "<font color=#4DB9D3>█" T "nuke.thisNode()\['tile_color'].setValue(1065320447)" +STARTLINE}
- addUserKnob {22 green l "<font color=#4DB97E>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1065310719)"}
- addUserKnob {22 olive l "<font color=#628067>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1920942079)"}
- addUserKnob {22 brown l "<font color=#9B6840>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2137407487)"}
- addUserKnob {22 grey_1 l "<font color=#DDDDDD>█" T "nuke.thisNode()\['tile_color'].setValue(3149642751)" +STARTLINE}
- addUserKnob {22 grey_2 l "<font color=#AAAAAA>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2576980479)"}
- addUserKnob {22 grey_3 l "<font color=#777777>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1717987071)"}
- addUserKnob {22 grey_4 l "<font color=#333333>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1145324799)"}
+ addUserKnob {22 red l "<font color=#D2654D><big>█" T "nuke.thisNode()\['tile_color'].setValue(2134851583)" +STARTLINE}
+ addUserKnob {22 pink l "<font color=#D265AD><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2134861567)"}
+ addUserKnob {22 purple l "<font color=#B473A3><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1916764159)"}
+ addUserKnob {22 blue l "<font color=#8291D3><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1062830079)"}
+ addUserKnob {22 cyan l "<font color=#4DB9D3><big>█" T "nuke.thisNode()\['tile_color'].setValue(1065320447)" +STARTLINE}
+ addUserKnob {22 green l "<font color=#4DB97E><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1065310719)"}
+ addUserKnob {22 olive l "<font color=#628067><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1920942079)"}
+ addUserKnob {22 brown l "<font color=#9B6840><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2137407487)"}
+ addUserKnob {22 grey_1 l "<font color=#DDDDDD><big>█" T "nuke.thisNode()\['tile_color'].setValue(3149642751)" +STARTLINE}
+ addUserKnob {22 grey_2 l "<font color=#AAAAAA><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2576980479)"}
+ addUserKnob {22 grey_3 l "<font color=#777777><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1717987071)"}
+ addUserKnob {22 grey_4 l "<font color=#333333><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1145324799)"}
  addUserKnob {26 ""}
  addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.01 version</font>"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}

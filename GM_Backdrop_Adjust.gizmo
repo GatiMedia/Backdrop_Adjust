@@ -5,8 +5,8 @@ BackdropNode {
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42
  selected true
- xpos 5947
- ypos -1690
+ xpos 11630
+ ypos -1882
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}

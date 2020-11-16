@@ -5,12 +5,12 @@ BackdropNode {
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42
  selected true
- xpos 3150
- ypos -982
+ xpos 5947
+ ypos -1690
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}
- addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "node_xpos = \[]\nnode_ypos = \[]\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n    \n    x_max = max(node_xpos)\n    x_min = min(node_xpos)\n    \n    x_width = (float(x_max) - float(x_min))\n    print (x_width)\n    \n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n    \n    y_height = (float(y_max) - float(y_min))\n    print (y_height)\n    \n    bd = nuke.thisNode()\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width+300)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height+300)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
+ addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "bd = nuke.thisNode()\n\nnode_xpos = \[]\nnode_ypos = \[]\nz_List = \[]\ncorner_x = \[]\ncorner_y = \[]\ncorner_bottom = \[]\nif nuke.selectedNodes('BackdropNode'):\n    sel_bd = nuke.selectedNodes('BackdropNode')\n    for s in sel_bd:\n        corner_x.append(s\['xpos'].value() + s\['bdwidth'].value())\n        corner_y.append(s\['ypos'].value())\n        corner_bottom.append(s\['ypos'].value() + s\['bdheight'].value())\n        z_List.append(s\['z_order'].value())\n    else:\n        pass\n\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n        \n    \n    x_max = max(node_xpos + corner_x)\n    x_min = min(node_xpos)\n\n    x_width = (float(x_max) - float(min(node_xpos + corner_x)))\n\n\n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n\n\n    if not corner_bottom:\n        corner_bottom.append(y_max - 1.0)\n    cornerYMax = max(corner_bottom)\n\n    if cornerYMax > y_max:\n        extra_y = abs((float(y_max) - float(cornerYMax)))\n    else:\n        extra_y = 0\n\n\n    y_height =  abs((float(min(node_ypos + corner_y)) - float(y_max)) )\n\n    if not corner_x:\n        corner_x.append(x_max - 1.0)\n    cornerXMin = min(corner_x)\n    xMax = max(node_xpos)\n\n    if cornerXMin < xMax:\n        extra_val = 100\n    else:\n        extra_val = 0\n\n    if not z_List:\n        z_List.append(0)\n    z_Min = min(z_List)\n\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width + extra_val + 200)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height + extra_y + 300)\n    bd\['z_order'].setValue(z_Min - 1)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
  addUserKnob {26 label_1 l <b>Label}
  addUserKnob {1 note l Note}
  note -

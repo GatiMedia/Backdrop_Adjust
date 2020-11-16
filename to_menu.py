@@ -3,6 +3,23 @@ def create_BD_Adj():
     node_Ypos = []
     z_List = []
     if nuke.selectedNodes():
+
+        if nuke.selectedNodes('BackdropNode'):
+            try:
+                sel_bd = nuke.selectedNodes('BackdropNode')
+                corner_x = []
+                corner_y = []
+                for s in sel_bd:
+                    corner_x.append(s['xpos'].value() + s['bdwidth'].value())
+                    corner_y.append(s['ypos'].value() - s['bdheight'].value())
+
+                corner_x_max = max(corner_x)
+                corner_y_min = min(corner_y)
+            else:
+                pass
+
+
+
         for s in nuke.selectedNodes():
             try:
                 node_Xpos.append(s['xpos'].value())
@@ -10,6 +27,11 @@ def create_BD_Adj():
                 z_List.append(s['z_order'].value())
             except:
                 pass
+
+
+        node_Xpos.append(corner_x_max)
+        node_Ypos.append(corner_y_min)
+
 
         x_Max = max(node_Xpos)
         x_Min = min(node_Xpos)
@@ -26,6 +48,14 @@ def create_BD_Adj():
         z_Min = min(z_List)
 
         bd_this = nuke.nodes.Backdrop_Adjust()
+
+        bd_this['tile_color'].setValue(255)
+
+        bd_this.setXpos(int(x_Min) - 100)
+        bd_this['bdwidth'].setValue(x_Width + 300)
+        bd_this.setYpos(int(y_Min) - 200)
+        bd_this['bdheight'].setValue(y_Height + 300)
+        bd_this['z_order'].setValue(z_Min - 1)
 
         ok_colors = [3149642751, 2863311615, 2576980479, 2290649343, 2004318207, 1717987071, 1431655935, 1145324799,
                      572662527, 286331391, 255]
@@ -49,13 +79,7 @@ def create_BD_Adj():
         else:
             bd_this['tile_color'].setValue(3149642751)
 
-        #TODO fix size issue
 
-        bd_this.setXpos(int(x_Min) - 100)
-        bd_this['bdwidth'].setValue(x_Width + 300)
-        bd_this.setYpos(int(y_Min) - 200)
-        bd_this['bdheight'].setValue(y_Height + 300)
-        bd_this['z_order'].setValue(z_Min - 1)
         bd_this.hideControlPanel()
     else:
         bd_that = nuke.createNode('Backdrop_Adjust')

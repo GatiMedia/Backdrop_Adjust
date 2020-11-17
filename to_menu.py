@@ -47,7 +47,7 @@ def create_BD_Adj():
 
         #TODO fix extra val to be a dynamic value
         if cornerXMin < xMax:
-            extra_val = 100
+            extra_val = 80
         else:
             extra_val = 0
 

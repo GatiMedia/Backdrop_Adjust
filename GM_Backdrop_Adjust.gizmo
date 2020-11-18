@@ -1,18 +1,18 @@
 BackdropNode {
  inputs 0
  name Backdrop_Adjust
- label "<center><font color=\[value note_color]>\[value note]\n\n\n"
+ label "<center><font color=\[value note_color]> \[value note]"
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42
  selected true
- xpos 11630
- ypos -1882
+ xpos 13375
+ ypos -3429
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}
- addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "bd = nuke.thisNode()\n\nnode_xpos = \[]\nnode_ypos = \[]\nz_List = \[]\ncorner_x = \[]\ncorner_y = \[]\ncorner_bottom = \[]\nif nuke.selectedNodes('BackdropNode'):\n    sel_bd = nuke.selectedNodes('BackdropNode')\n    for s in sel_bd:\n        corner_x.append(s\['xpos'].value() + s\['bdwidth'].value())\n        corner_y.append(s\['ypos'].value())\n        corner_bottom.append(s\['ypos'].value() + s\['bdheight'].value())\n        z_List.append(s\['z_order'].value())\n    else:\n        pass\n\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n        \n    \n    x_max = max(node_xpos + corner_x)\n    x_min = min(node_xpos)\n\n    x_width = (float(x_max) - float(min(node_xpos + corner_x)))\n\n\n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n\n\n    if not corner_bottom:\n        corner_bottom.append(y_max - 1.0)\n    cornerYMax = max(corner_bottom)\n\n    if cornerYMax > y_max:\n        extra_y = abs((float(y_max) - float(cornerYMax)))\n    else:\n        extra_y = 0\n\n\n    y_height =  abs((float(min(node_ypos + corner_y)) - float(y_max)) )\n\n    if not corner_x:\n        corner_x.append(x_max - 1.0)\n    cornerXMin = min(corner_x)\n    xMax = max(node_xpos)\n\n    if cornerXMin < xMax:\n        extra_val = 100\n    else:\n        extra_val = 0\n\n    if not z_List:\n        z_List.append(0)\n    z_Min = min(z_List)\n\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width + extra_val + 200)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height + extra_y + 300)\n    bd\['z_order'].setValue(z_Min - 1)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
+ addUserKnob {22 cover l "<font color=yellow>Cover Selected Area" T "bd = nuke.thisNode()\n\nnode_xpos = \[]\nnode_ypos = \[]\nz_List = \[]\ncorner_x = \[]\ncorner_y = \[]\ncorner_bottom = \[]\nif nuke.selectedNodes('BackdropNode'):\n    sel_bd = nuke.selectedNodes('BackdropNode')\n    for s in sel_bd:\n        corner_x.append(s\['xpos'].value() + s\['bdwidth'].value())\n        corner_y.append(s\['ypos'].value())\n        corner_bottom.append(s\['ypos'].value() + s\['bdheight'].value())\n        z_List.append(s\['z_order'].value())\n    else:\n        pass\n\nif nuke.selectedNodes():\n    for s in nuke.selectedNodes():\n        node_xpos.append(s\['xpos'].value())\n        node_ypos.append(s\['ypos'].value())\n        \n    \n    x_max = max(node_xpos + corner_x)\n    x_min = min(node_xpos)\n\n    x_width = (float(x_max) - float(min(node_xpos + corner_x)))\n\n\n    y_max = max(node_ypos)\n    y_min = min(node_ypos)\n\n\n    if not corner_bottom:\n        corner_bottom.append(y_max - 1.0)\n    cornerYMax = max(corner_bottom)\n\n    if cornerYMax > y_max:\n        extra_y = abs((float(y_max) - float(cornerYMax)))\n    else:\n        extra_y = 0\n\n\n    y_height =  abs((float(min(node_ypos + corner_y)) - float(y_max)) )\n\n    if not corner_x:\n        corner_x.append(x_max - 1.0)\n    cornerXMin = min(corner_x)\n    xMax = max(node_xpos)\n\n    if cornerXMin < xMax:\n        extra_val = 50\n    else:\n        extra_val = 0\n\n    if not z_List:\n        z_List.append(0)\n    z_Min = min(z_List)\n\n    bd.setXpos(int(x_min) - 100)\n    bd\['bdwidth'].setValue(x_width + extra_val + 200)\n    bd.setYpos(int(y_min) - 200)\n    bd\['bdheight'].setValue(y_height + extra_y + 300)\n    bd\['z_order'].setValue(z_Min - 1)\nelse:\n    nuke.message('<font color=orange><b>Select nodes first!')" +STARTLINE}
  addUserKnob {26 label_1 l <b>Label}
- addUserKnob {1 note l Note}
+ addUserKnob {43 note l Note}
  note -
  addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
  addUserKnob {26 font_size l "Note size"}
@@ -42,6 +42,14 @@ BackdropNode {
  addUserKnob {22 grey_2 l "<font color=#AAAAAA><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2576980479)"}
  addUserKnob {22 grey_3 l "<font color=#777777><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1717987071)"}
  addUserKnob {22 grey_4 l "<font color=#333333><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1145324799)"}
+ addUserKnob {26 tasks l <b>Tasks}
+ addUserKnob {22 read l "<font color=white>Read" T "# Read\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Read.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(3149642751)\nbd\['note'].setValue('Read')\nbd\['note_color'].setValue('Black')" +STARTLINE}
+ addUserKnob {22 write l "<font color=white>Write" -STARTLINE T "# Write\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Write.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(2134851583)\nbd\['note'].setValue('Write')\nbd\['note_color'].setValue('White')"}
+ addUserKnob {22 retime l "<font color=white>Retime" -STARTLINE T "# Retime\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Retime.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(2134861567)\nbd\['note'].setValue('Retime')\nbd\['note_color'].setValue('Fuchsia')"}
+ addUserKnob {22 roto l "<font color=white>Roto" T "# Roto\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Roto.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(1920942079)\nbd\['note'].setValue('Roto')\nbd\['note_color'].setValue('Yellow')" +STARTLINE}
+ addUserKnob {22 key l "<font color=white>Key" -STARTLINE T "# Key\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Keyer.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(1065320447)\nbd\['note'].setValue('Key')\nbd\['note_color'].setValue('Aqua')"}
+ addUserKnob {22 threed l "<font color=white>3D" T "# Geo\n\nbd = nuke.thisNode()\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"Geometry.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(2137407487)\nbd\['note'].setValue('3D')\nbd\['note_color'].setValue('Orange')" +STARTLINE}
+ addUserKnob {22 particle l "<font color=white>Particle" -STARTLINE T "# Particle\n\nbd = nuke.thisNode()\n\nbd\['label'].setValue(\"\"\"<center><font color=\[value note_color]><img src= \"ParticleEmitter.png\"> \[value note]\"\"\")\nbd\['tile_color'].setValue(1145324799)\nbd\['note'].setValue('Particle')\nbd\['note_color'].setValue('White')\n"}
  addUserKnob {26 ""}
  addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.01 version</font>"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}

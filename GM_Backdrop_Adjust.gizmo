@@ -5,8 +5,8 @@ BackdropNode {
  note_font "Bitstream Vera Sans Bold"
  note_font_size 42
  selected true
- xpos 13145
- ypos -4533
+ xpos 11605
+ ypos -5301
  bdwidth 550
  bdheight 521
  z_order -4
@@ -54,7 +54,7 @@ BackdropNode {
  addUserKnob {22 track l "<font color=white>Track" -STARTLINE T "# track\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1916764159)\nbd\['note'].setValue('TRACK')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
  addUserKnob {22 matte l "<font color=white>Matte" T "# matte\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2134861567)\nbd\['note'].setValue('DMP')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Fuchsia')" +STARTLINE}
  addUserKnob {22 grade l "<font color=white>Grade" -STARTLINE T "# grade\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1062830079)\nbd\['note'].setValue('GRADE')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')\n"}
- addUserKnob {22 lens_effect l "<font color=white>Lens Effect" -STARTLINE T "# lens effect\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1065320447)\nbd\['note'].setValue('LENS\\nEFFECT')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Yellow')"}
+ addUserKnob {22 lens_effect l "<font color=white>Lens Effect" -STARTLINE T "# lens effect\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1065320447)\nbd\['note'].setValue('LENS\\nEFFECT')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
  addUserKnob {22 grain l "<font color=white>Grain" T "# grain\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1717987071)\nbd\['note'].setValue('GRAIN')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Aqua')" +STARTLINE}
  addUserKnob {22 key l "<font color=white>Key" -STARTLINE T "# key\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1065310719)\nbd\['note'].setValue('KEY')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Lime')"}
  addUserKnob {22 roto l "<font color=white>Roto" -STARTLINE T "# roto\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1920942079)\nbd\['note'].setValue('ROTO')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Yellow')"}

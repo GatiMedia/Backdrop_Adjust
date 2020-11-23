@@ -76,7 +76,7 @@ def create_BD_Adj():
         bd_this['bdheight'].setValue(int(y_height) + int(y_extra) + 300)
         bd_this['z_order'].setValue(z_Min - 1)
 
-        # Handle tile_color
+        # Handle tile_color by Borsari Nicola
         ok_colors = [3149642751, 2863311615, 2576980479, 2290649343, 2004318207, 1717987071, 1431655935, 1145324799,
                      572662527, 286331391, 255]
 

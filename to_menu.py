@@ -2,15 +2,15 @@ def create_BD_Adj():
     node_xpos = []
     node_ypos = []
     z_List = []
-    corner_x = []
-    corner_y = []
-    corner_bottom = []
+    bd_xpos = []
+    bd_ypos = []
     if nuke.selectedNodes('BackdropNode'):
         sel_bd = nuke.selectedNodes('BackdropNode')
         for s in sel_bd:
-            corner_x.append(s['xpos'].value() + s['bdwidth'].value())
-            corner_y.append(s['ypos'].value())
-            corner_bottom.append(s['ypos'].value() + s['bdheight'].value())
+            bd_xpos.append(s['xpos'].value())
+            bd_xpos.append(s['xpos'].value() + s['bdwidth'].value())
+            bd_ypos.append(s['ypos'].value())
+            bd_ypos.append(s['ypos'].value() + s['bdheight'].value())
             z_List.append(s['z_order'].value())
         else:
             pass
@@ -20,50 +20,63 @@ def create_BD_Adj():
             node_xpos.append(s['xpos'].value())
             node_ypos.append(s['ypos'].value())
 
-        x_max = max(node_xpos + corner_x)
+        x_max = max(node_xpos)
         x_min = min(node_xpos)
-
-        x_width = (float(x_max) - float(min(node_xpos + corner_x)))
 
         y_max = max(node_ypos)
         y_min = min(node_ypos)
 
-        if not corner_bottom:
-            corner_bottom.append(y_max - 1.0)
-        cornerYMax = max(corner_bottom)
+        # Calculating the node's size in if the lowest right corner isn't a Backdrop but a node
+        if not bd_xpos:
+            bd_xpos.append(x_min)
+            bd_ypos.append(y_max)
 
-        if cornerYMax > y_max:
-            extra_y = abs((float(y_max) - float(cornerYMax)))
+        if bd_xpos:
+            max_bd_xpos = max(bd_xpos)
+            min_bd_xpos = min(bd_xpos)
+
+            max_bd_ypos = max(bd_ypos)
+            min_bd_ypos = min(bd_ypos)
+
+            if max_bd_xpos > x_max:
+                x_extra = 0
+            else:
+                x_extra = 80
+
+            if max_bd_ypos > y_max:
+                y_extra = 0
+            else:
+                y_extra = 30
+
         else:
-            extra_y = 0
+            pass
 
-        y_height = abs((float(min(node_ypos + corner_y)) - float(y_max)))
+        x_max = max(node_xpos + bd_xpos)
+        x_min = min(node_xpos + bd_xpos)
 
-        if not corner_x:
-            corner_x.append(x_max - 1.0)
-        cornerXMin = min(corner_x)
-        xMax = max(node_xpos)
+        x_width = (float(x_max) - float(x_min))
 
+        y_max = max(node_ypos + bd_ypos)
+        y_min = min(node_ypos + bd_ypos)
 
-        #TODO fix extra val to be a dynamic value
-        if cornerXMin < xMax:
-            extra_val = 80
-        else:
-            extra_val = 0
+        y_height = (float(y_max) - float(y_min))
+
 
         if not z_List:
             z_List.append(0)
         z_Min = min(z_List)
 
+
+        # Creating the node
         bd_this = nuke.nodes.Backdrop_Adjust()
 
-        bd_this.setXpos(int(x_min) - 100)
-        bd_this['bdwidth'].setValue(x_width + extra_val + 200)
-        bd_this.setYpos(int(y_min) - 200)
-        bd_this['bdheight'].setValue(y_height + extra_y + 300)
+        bd_this.setXpos(int(x_min) - int(x_extra) - 100)
+        bd_this['bdwidth'].setValue(int(x_width) + int(x_extra) + 200)
+        bd_this.setYpos(int(y_min) - int(y_extra) - 100)
+        bd_this['bdheight'].setValue(int(y_height) + int(y_extra) + 200)
         bd_this['z_order'].setValue(z_Min - 1)
 
-        # Handle tile_color:
+        # Handle tile_color
         ok_colors = [3149642751, 2863311615, 2576980479, 2290649343, 2004318207, 1717987071, 1431655935, 1145324799,
                      572662527, 286331391, 255]
 
@@ -86,13 +99,11 @@ def create_BD_Adj():
         else:
             bd_this['tile_color'].setValue(3149642751)
 
-
         bd_this.hideControlPanel()
     else:
         bd_that = nuke.createNode('Backdrop_Adjust')
         bd_that['tile_color'].setValue(3149642751)
         bd_that['z_order'].setValue(0)
         bd_that.hideControlPanel()
-
 
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust.', 'create_BD_Adj()', shortcut='ctrl+b', icon='Backdrop.png', index=3)

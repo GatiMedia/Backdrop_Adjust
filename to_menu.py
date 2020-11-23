@@ -70,10 +70,10 @@ def create_BD_Adj():
         # Creating the node
         bd_this = nuke.nodes.Backdrop_Adjust()
 
-        bd_this.setXpos(int(x_min) - int(x_extra) - 100)
+        bd_this.setXpos(int(x_min) - 100)
         bd_this['bdwidth'].setValue(int(x_width) + int(x_extra) + 200)
-        bd_this.setYpos(int(y_min) - int(y_extra) - 100)
-        bd_this['bdheight'].setValue(int(y_height) + int(y_extra) + 200)
+        bd_this.setYpos(int(y_min) - 200)
+        bd_this['bdheight'].setValue(int(y_height) + int(y_extra) + 300)
         bd_this['z_order'].setValue(z_Min - 1)
 
         # Handle tile_color

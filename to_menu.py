@@ -10,7 +10,7 @@ def create_BD_Adj():
                 pass
 
         if not z_List:
-            z_List.append(0)
+            z_List.append(1)
         z_Min = min(z_List)
 
 

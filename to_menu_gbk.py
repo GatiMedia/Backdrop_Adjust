@@ -63,11 +63,11 @@ def create_BD_Adj():
         else:
             bd_this['tile_color'].setValue(3149642751)
 
-        bd_this.hideControlPanel()
+        bd_this.showControlPanel()
     else:
         bd_that = nuke.createNode('Backdrop_Adjust')
         bd_that['tile_color'].setValue(3149642751)
         bd_that['z_order'].setValue(-250000)
-        bd_that.hideControlPanel()
+        bd_that.showControlPanel()
 
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust.', 'create_BD_Adj()', shortcut='ctrl+b', icon='Backdrop.png', index=3)

@@ -61,6 +61,7 @@ BackdropNode {
  addUserKnob {22 grey_4 l "<font color=#333333><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1145324799)"}
  addUserKnob {22 grey_5 l "<font color=#222222><big>█" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(572662527)"}
  addUserKnob {20 re_size l "Re Size" n 1}
+ re_size 0
  addUserKnob {26 y l Height}
  addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100" T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+100)\n\nnew_height =  int(curr_height + 100)\n\n\n# GBK BD size method\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"bdheight\" or k.name() == \"bdwidth\":\n    w = n\[\"bdwidth\"].getValue()\n    h = n\[\"bdheight\"].getValue()\n    n\[\"z_order\"].setValue(w * h * -1)" +STARTLINE}
  addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500" -STARTLINE T "curr_height = nuke.thisNode()\['bdheight'].value()\n\nnuke.thisNode()\['bdheight'].setValue(curr_height+500)\n\nnew_height = int(curr_height + 500)\n\n# GBK BD size method\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"bdheight\" or k.name() == \"bdwidth\":\n    w = n\[\"bdwidth\"].getValue()\n    h = n\[\"bdheight\"].getValue()\n    n\[\"z_order\"].setValue(w * h * -1)"}

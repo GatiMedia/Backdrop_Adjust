@@ -1,46 +1,30 @@
-### MODIFY TILE COLOR ###
+### DARKEN TILE COLOR ###
 
-color_list = []
+import colorsys
 
-for s in nuke.selectedNodes('BackdropNode'):
-    try:
-        color_list.append(s['tile_color'].value())
-    except:
-        pass
+# getting tile_color value
+dec_til = nuke.thisNode()['tile_color'].value()
 
-dec_til = min(color_list)
+# dec to hex
+hex_til = hex(dec_til)[2:8]
 
-# Dec to Hex
-hex_til = hex(int(dec_til))
+# hex to RGB
+rgb = tuple(int(hex_til[i:i+2], 16) for i in (0, 2, 4))
 
-# Hex strip
-hex_til_to_rgb = hex_til[2:8]
+# rgb to hls
+(h, l, s) = colorsys.rgb_to_hls(rgb[0]/255, rgb[1]/255, rgb[2]/255)
 
-# Hex to RGB
-rgb_til = tuple(int(hex_til_to_rgb[i:i+2], 16) for i in (0, 2, 4))
+# adjust luma value
+l = l - .025
 
-rgb_til_list = list(rgb_til)
+# hls to rgb with clamped luma
+(r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
 
-# Modifying RGB to a new value
-rgb_til_list_new = []
-for i in rgb_til_list:
-    rgb_til_list_new.append(i - 30)
+# rgb to hex
+new_hex = '%02x%02x%02x' % (int(r*255), int(g*255), int(b*255))
 
-# Preventing minus values
-for n, i in enumerate(rgb_til_list_new):
-   if i < 0:
-      rgb_til_list_new[n] = 1
+# hex to decimal
+nukeHex = int(new_hex+"00", 16)
 
-# RGB to Hex
-new_hex = ('%02x%02x%02x' % (rgb_til_list_new[0], rgb_til_list_new[1], rgb_til_list_new[2])) + '00'
-
-# Hex to Dec
-new_dec = int(new_hex, 16)
-
-nuke.toNode('BackdropNode9')['tile_color'].setValue(int(new_dec))
-
-
-print (dec_til)
-print (hex_til)
-print (rgb_til_list_new)
-print (new_dec)
+# applying new tile_color
+nuke.thisNode()['tile_color'].setValue(nukeHex)

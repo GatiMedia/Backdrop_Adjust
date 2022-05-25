@@ -76,12 +76,12 @@ def create_BD_Adj():
             # applying new tile_color
             bd_this['tile_color'].setValue(nukeHex)
         else:
-            bd_this['tile_color'].setValue(3149642751)
+            bd_this['tile_color'].setValue(1717987071)
 
         bd_this.showControlPanel()
     else:
         bd_that = nuke.createNode('Backdrop_Adjust')
-        bd_that['tile_color'].setValue(3149642751)
+        bd_that['tile_color'].setValue(1717987071)
         bd_that['z_order'].setValue(-250000)
         bd_that.showControlPanel()
 

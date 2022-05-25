@@ -1,4 +1,5 @@
 def create_BD_Adj():
+    import colorsys
     z_List = []
     if nuke.selectedNodes():
 
@@ -12,8 +13,7 @@ def create_BD_Adj():
         if not z_List:
             z_List.append(1)
         z_Min = min(z_List)
-
-
+        
         nodes = nuke.selectedNodes()
 
         # Calculate bounds for the backdrop node.
@@ -40,26 +40,41 @@ def create_BD_Adj():
         # GBK BD size method
         bd_this['z_order'].setValue(bdW * bdH * -1)
 
-        # Handle tile_color by Borsari Nicola
-        ok_colors = [3149642751, 2863311615, 2576980479, 2290649343, 2004318207, 1717987071, 1431655935, 1145324799,
-                     572662527, 286331391, 255]
+        def tile_luma(node_name):
+            # getting tile_color value
+            dec_til = nuke.toNode(node_name)['tile_color'].value()
+            # dec to hex
+            hex_til = hex(dec_til)[2:8]
+            # hex to RGB
+            rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
+            # rgb to hls
+            (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
+            return (h, l, s)
 
         if nuke.selectedNodes('BackdropNode'):
-            existing_indexes = [0]
-            for bd in nuke.selectedNodes('BackdropNode'):
-                color = int(bd['tile_color'].getValue())
-                try:
-                    curr_index = ok_colors.index(color)
-                    existing_indexes.append(curr_index)
-                except ValueError:
-                    continue
+            luma_values = []
+            node_names = []
+            for i in nuke.selectedNodes('BackdropNode'):
+                luma_values.append(tile_luma(i.name())[1])
+                node_names.append(i.name())
 
-            new_index = sorted(existing_indexes)[-1] + 1
+            min_val = (min(luma_values))
+            min_val_index = (luma_values.index(min_val))
 
-            try:
-                bd_this['tile_color'].setValue(ok_colors[new_index])
-            except IndexError:
-                bd_this['tile_color'].setValue(ok_colors[-1])
+            min_node_name = (node_names[min_val_index])
+
+            (h, l, s) = (tile_luma(min_node_name))
+
+            # adjust luma value
+            l = min_val - .025
+            # hls to rgb with clamped luma
+            (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
+            # rgb to hex
+            new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+            # hex to decimal
+            nukeHex = int(new_hex + "00", 16)
+            # applying new tile_color
+            bd_this['tile_color'].setValue(nukeHex)
         else:
             bd_this['tile_color'].setValue(3149642751)
 

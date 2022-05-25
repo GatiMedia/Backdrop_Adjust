@@ -73,6 +73,6 @@ BackdropNode {
  addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500" -STARTLINE T "curr_width = nuke.thisNode()\['bdwidth'].value()\n\nnuke.thisNode()\['bdwidth'].setValue(curr_width-500)\n\nnew_width =  int(curr_width - 500)\n\n# GBK BD size method\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"bdheight\" or k.name() == \"bdwidth\":\n    w = n\[\"bdwidth\"].getValue()\n    h = n\[\"bdheight\"].getValue()\n    n\[\"z_order\"].setValue(w * h * -1)"}
  addUserKnob {20 endGroup n -1}
  addUserKnob {26 ""}
- addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.3 version</font>"}
+ addUserKnob {26 TEXT l "" +STARTLINE T "<font color=#808080 size=\"5\" >1.4 version</font>"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}
 }

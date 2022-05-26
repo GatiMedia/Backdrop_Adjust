@@ -13,7 +13,8 @@ def create_BD_Adj():
         if not z_List:
             z_List.append(1)
         z_Min = min(z_List)
-        
+
+
         nodes = nuke.selectedNodes()
 
         # Calculate bounds for the backdrop node.
@@ -39,7 +40,8 @@ def create_BD_Adj():
 
         # GBK BD size method
         bd_this['z_order'].setValue(bdW * bdH * -1)
-
+        
+        # For color changing to get lume value
         def tile_luma(node_name):
             # getting tile_color value
             dec_til = nuke.toNode(node_name)['tile_color'].value()
@@ -48,9 +50,10 @@ def create_BD_Adj():
             # hex to RGB
             rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
             # rgb to hls
-            (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
+            (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0)
             return (h, l, s)
 
+        # Making tile_color darker than darkest selected BackdropNode's 
         if nuke.selectedNodes('BackdropNode'):
             luma_values = []
             node_names = []
@@ -70,7 +73,7 @@ def create_BD_Adj():
             # hls to rgb with clamped luma
             (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
             # rgb to hex
-            new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+            new_hex = '%02x%02x%02x' % (int(r * 255.0), int(g * 255.0), int(b * 255.0))
             # hex to decimal
             nukeHex = int(new_hex + "00", 16)
             # applying new tile_color

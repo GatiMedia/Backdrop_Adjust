@@ -9,7 +9,9 @@ HOW TO INSTALL:
 
 3. Add this code to your file init.py (if you don’t have it, create one) and modify the Backdrop_path.
 
+```python
 Backdrop_path = """<path to your .nuke folder>/Backdrop_Adjust/"""
 nuke.pluginAddPath(Backdrop_path)
+```
 
 4. Run Nuke

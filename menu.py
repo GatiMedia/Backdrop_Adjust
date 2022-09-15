@@ -1,7 +1,8 @@
 # --------------------------------------------------------------
-#  BackdropAdjust menu.py
+#  Backdrop_Adjust/menu.py
 #  Version: 1.6
-#  Last Updated: 12/09/2022
+#  Last Updated: 15/09/2022
+#  By Attila Gasparetz
 # --------------------------------------------------------------
 
 import nuke
@@ -9,10 +10,9 @@ import colorsys
 import os
 
 
-def zOrderFoundry():
+def zOrderFoundry(node):
     # Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
     sel_bd = nuke.selectedNodes('BackdropNode')
-    node = nuke.thisNode()
     def nodeIsInside(node, backdropNode):
         """Returns true if node geometry is inside backdropNode otherwise returns false"""
         topLeftNode = [node.xpos(), node.ypos()]
@@ -26,18 +26,23 @@ def zOrderFoundry():
 
         return topLeft and bottomRight
 
-    zOrder = 0
+    zOrderF = 0
     # if there are backdropNodes selected put the new one immediately behind the farthest one
     if len(sel_bd):
-        zOrder = min([node.knob("z_order").value() for node in sel_bd]) - 1
+        zOrderF = min([node.knob("z_order").value() for node in sel_bd]) - 1
     else:
         # otherwise (no backdrop in selection) find the nearest backdrop if exists and set the new one in front of it
         nonSelectedBackdropNodes = nuke.allNodes("BackdropNode")
         for nonBackdrop in nodes:
             for backdrop in nonSelectedBackdropNodes:
                 if nodeIsInside(nonBackdrop, backdrop):
-                    zOrder = max(zOrder, backdrop.knob("z_order").value() + 1)
-    return (zOrder)
+                    zOrderF = max(zOrderF, backdrop.knob("z_order").value() + 1)
+    return (zOrderF)
+
+
+def zOrderAlt(node):
+    zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
+    return (zOrderA)
 
 
 def create_BD_Adj():
@@ -67,12 +72,15 @@ def create_BD_Adj():
 
         # z_order Foundry
         if sel_bd:
-            bd_this['z_order'].setValue(zOrderFoundry())
+            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
         else:
             bd_this['z_order'].setValue(0)
 
-        # z_order GBK
-        #bd_this['z_order'].setValue(bdW * bdH * -1)
+        # z_order Alt
+        # if nuke.selectedNodes('BackdropNode'):
+        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+        # else:
+        #     bd_this['z_order'].setValue(0)
 
         # For color changing to get luma value
         def tile_luma(node_name):
@@ -119,8 +127,9 @@ def create_BD_Adj():
         #bd_that = nuke.createNode('Backdrop_Adjust')
         bd_that = nuke.createNode('Backdrop_Adjust')
         bd_that['tile_color'].setValue(1717987071)
+        # z_order Foundry
         bd_that['z_order'].setValue(0)
-        # z_order GBK
+        # z_order Alt
         #bd_that['z_order'].setValue(-250000)
         bd_that.showControlPanel()
 
@@ -156,12 +165,16 @@ def coverSelectedArea():
 
         # z_order Foundry
         if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry())
+            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
         else:
             pass
 
-        # z_order GBK
-        #bd_this['z_order'].setValue(bdW * bdH * -1)
+        # z_order Alt
+        # if nuke.selectedNodes('BackdropNode'):
+        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+        # else:
+        #     bd_this['z_order'].setValue(0)
+
     else:
         nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
 
@@ -203,12 +216,16 @@ def extendSelectedArea():
 
         # z_order Foundry
         if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry())
+            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
         else:
             pass
 
-        # z_order GBK
-        #bd_this['z_order'].setValue(bdW * bdH * -1)
+        # z_order Alt
+        # if nuke.selectedNodes('BackdropNode'):
+        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+        # else:
+        #     bd_this['z_order'].setValue(0)
+
     else:
         nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
 
@@ -331,17 +348,16 @@ def addY100():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # z_order GBK
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def addY500():
     bd_this = nuke.thisNode()
@@ -349,17 +365,16 @@ def addY500():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # z_order GBK
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def takeY100():
     bd_this = nuke.thisNode()
@@ -367,17 +382,16 @@ def takeY100():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def takeY500():
     bd_this = nuke.thisNode()
@@ -385,17 +399,16 @@ def takeY500():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def addX100():
     bd_this = nuke.thisNode()
@@ -403,17 +416,16 @@ def addX100():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def addX500():
     bd_this = nuke.thisNode()
@@ -421,17 +433,16 @@ def addX500():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def takeX100():
     bd_this = nuke.thisNode()
@@ -439,17 +450,16 @@ def takeX100():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)
+
 
 def takeX500():
     bd_this = nuke.thisNode()
@@ -457,14 +467,12 @@ def takeX500():
 
     # z_order Foundry
     if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry())
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     else:
         pass
 
-    # GBK BD size method
-    # n = nuke.thisNode()
-    # k = nuke.thisKnob()
-    # if k.name() == "bdheight" or k.name() == "bdwidth":
-    #     w = n["bdwidth"].getValue()
-    #     h = n["bdheight"].getValue()
-    #     n["z_order"].setValue(w * h * -1)
+    # z_order Alt
+    # if nuke.selectedNodes('BackdropNode'):
+    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
+    # else:
+    #     bd_this['z_order'].setValue(0)

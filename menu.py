@@ -1,17 +1,18 @@
 # --------------------------------------------------------------
-#  Backdrop_Adjust/menu.py
+#  BackdropAdjust menu.py
 #  Version: 1.6
-#  Last Updated: 15/09/2022
-#  By Attila Gasparetz
+#  Last Updated: 12/09/2022
 # --------------------------------------------------------------
 
+
+## Imports
 import nuke
 import colorsys
-import os
+import webbrowser
 
-
+## Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
 def zOrderFoundry(node):
-    # Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
+
     sel_bd = nuke.selectedNodes('BackdropNode')
     def nodeIsInside(node, backdropNode):
         """Returns true if node geometry is inside backdropNode otherwise returns false"""
@@ -44,7 +45,7 @@ def zOrderAlt(node):
     zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
     return (zOrderA)
 
-
+## The main function
 def create_BD_Adj():
     if nuke.selectedNodes():
         sel_bd = nuke.selectedNodes('BackdropNode')
@@ -133,12 +134,11 @@ def create_BD_Adj():
         #bd_that['z_order'].setValue(-250000)
         bd_that.showControlPanel()
 
-# Add to the Toolset
+## Add to the Toolset
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='ctrl+b', icon='Backdrop.png', index=3)
 
-
+## Cover selected nodes' area
 def coverSelectedArea():
-    ## Cover selected nodes' area
     bd_this = nuke.thisNode()
     if nuke.selectedNodes():
 
@@ -178,9 +178,8 @@ def coverSelectedArea():
     else:
         nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
 
-
+## Extend selected nodes' area
 def extendSelectedArea():
-    ## Extend selected nodes' area
     bd_this = nuke.thisNode()
     if nuke.selectedNodes():
         nodes = nuke.selectedNodes()
@@ -239,10 +238,8 @@ def fontMinusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
     nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
 
-
+## Vivid/Dull palette knob
 def dullVividColor():
-    # Vivid/Dull palette knob #
-
     dull = '<big><font style="background-color:#806060;">D<font style="background-color:#807460;">u<font style="background-color:#778060;">l<font style="background-color:#608071;">l<font style="background-color:#607a80;"> <font style="background-color:#606680;">C<font style="background-color:#606680;">o<font style="background-color:#6d6080;">l<font style="background-color:#80607d;">o<font style="background-color:#806069;">r<font style="background-color:#806060;">s'
 
     vivid = '<big><font style="background-color:#994d4d;">V<font style="background-color:#997d4d;">i<font style="background-color:#85994d;">v<font style="background-color:#55994d;">i<font style="background-color:#4d9976;">d<font style="background-color:#4d8c99;"> <font style="background-color:#4d5c99;">C<font style="background-color:#6e4d99;">o<font style="background-color:#994d94;">l<font style="background-color:#994d63;">o<font style="background-color:#994d4d;">r<font style="background-color:#997d4d;">s'
@@ -275,12 +272,8 @@ def dullVividColor():
         node[knob_names[i]].setLabel("<font color=#{}><big>█</big></font>".format(hex_color))
         node[knob_names[i]].setValue("nuke.thisNode()['tile_color'].setValue({})".format(color))
 
-
+## Darken tile_color
 def darkenTileColor():
-    ### DARKEN TILE COLOR ###
-
-    import colorsys
-
     # getting tile_color value
     dec_til = nuke.thisNode()['tile_color'].value()
 
@@ -308,12 +301,8 @@ def darkenTileColor():
     # applying new tile_color
     nuke.thisNode()['tile_color'].setValue(nukeHex)
 
-
+## Brighten tile_color
 def brightenTileColor():
-    ### BRIGHTEN TILE COLOR ###
-
-    import colorsys
-
     # getting tile_color value
     dec_til = nuke.thisNode()['tile_color'].value()
 
@@ -476,3 +465,6 @@ def takeX500():
     #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
     # else:
     #     bd_this['z_order'].setValue(0)
+
+def openWebsite():
+    webbrowser.open('https://www.gatimedia.co.uk/backdrop-adjust', new=2)

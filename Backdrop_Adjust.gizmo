@@ -1,470 +1,82 @@
-# --------------------------------------------------------------
-#  BackdropAdjust menu.py
-#  Version: 1.6
-#  Last Updated: 26/09/2022
-# --------------------------------------------------------------
-
-
-## Imports
-import nuke
-import colorsys
-import webbrowser
-
-## Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
-def zOrderFoundry(node):
-
-    sel_bd = nuke.selectedNodes('BackdropNode')
-    def nodeIsInside(node, backdropNode):
-        """Returns true if node geometry is inside backdropNode otherwise returns false"""
-        topLeftNode = [node.xpos(), node.ypos()]
-        topLeftBackDrop = [backdropNode.xpos(), backdropNode.ypos()]
-        bottomRightNode = [node.xpos() + node.screenWidth(), node.ypos() + node.screenHeight()]
-        bottomRightBackdrop = [backdropNode.xpos() + backdropNode.screenWidth(),
-                               backdropNode.ypos() + backdropNode.screenHeight()]
-
-        topLeft = (topLeftNode[0] >= topLeftBackDrop[0]) and (topLeftNode[1] >= topLeftBackDrop[1])
-        bottomRight = (bottomRightNode[0] <= bottomRightBackdrop[0]) and (bottomRightNode[1] <= bottomRightBackdrop[1])
-
-        return topLeft and bottomRight
-
-    zOrderF = 0
-    # if there are backdropNodes selected put the new one immediately behind the farthest one
-    if len(sel_bd):
-        zOrderF = min([node.knob("z_order").value() for node in sel_bd]) - 1
-    else:
-        # otherwise (no backdrop in selection) find the nearest backdrop if exists and set the new one in front of it
-        nonSelectedBackdropNodes = nuke.allNodes("BackdropNode")
-        for nonBackdrop in nodes:
-            for backdrop in nonSelectedBackdropNodes:
-                if nodeIsInside(nonBackdrop, backdrop):
-                    zOrderF = max(zOrderF, backdrop.knob("z_order").value() + 1)
-    return (zOrderF)
-
-
-def zOrderAlt(node):
-    zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
-    return (zOrderA)
-
-## The main function
-def create_BD_Adj():
-    if nuke.selectedNodes():
-        sel_bd = nuke.selectedNodes('BackdropNode')
-        nodes = nuke.selectedNodes()
-
-        # Calculate bounds for the backdrop node.
-        bdX = min([node.xpos() for node in nodes])
-        bdY = min([node.ypos() for node in nodes])
-        bdW = max([node.xpos() + node.screenWidth() for node in nodes]) - bdX
-        bdH = max([node.ypos() + node.screenHeight() for node in nodes]) - bdY
-
-        # Expand the bounds to leave a little border. Elements are offsets for left, top, right and bottom edges respectively
-        left, top, right, bottom = (-100, -200, 100, 100)
-        bdX += left
-        bdY += top
-        bdW += (right - left)
-        bdH += (bottom - top)
-
-        # Creating the node
-        bd_this = nuke.nodes.Backdrop_Adjust()
-        bd_this["xpos"].setValue(bdX)
-        bd_this["bdwidth"].setValue(bdW)
-        bd_this["ypos"].setValue(bdY)
-        bd_this["bdheight"].setValue(bdH)
-
-        # z_order Foundry
-        if sel_bd:
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            bd_this['z_order'].setValue(0)
-
-        # z_order Alt
-        # if nuke.selectedNodes('BackdropNode'):
-        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-        # else:
-        #     bd_this['z_order'].setValue(0)
-
-        # For color changing to get luma value
-        def tile_luma(node_name):
-            # getting tile_color value
-            dec_til = nuke.toNode(node_name)['tile_color'].value()
-            # dec to hex
-            hex_til = hex(dec_til)[2:8]
-            # hex to RGB
-            rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
-            # rgb to hls
-            (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0)
-            return (h, l, s)
-
-        # Making tile_color darker than darkest selected BackdropNode's
-        if nuke.selectedNodes('BackdropNode'):
-            luma_values = []
-            node_names = []
-            for i in nuke.selectedNodes('BackdropNode'):
-                luma_values.append(tile_luma(i.name())[1])
-                node_names.append(i.name())
-
-            min_val = (min(luma_values))
-            min_val_index = (luma_values.index(min_val))
-
-            min_node_name = (node_names[min_val_index])
-
-            (h, l, s) = (tile_luma(min_node_name))
-
-            # adjust luma value
-            l = min_val - .025
-            # hls to rgb with clamped luma
-            (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
-            # rgb to hex
-            new_hex = '%02x%02x%02x' % (int(r * 255.0), int(g * 255.0), int(b * 255.0))
-            # hex to decimal
-            nukeHex = int(new_hex + "00", 16)
-            # applying new tile_color
-            bd_this['tile_color'].setValue(nukeHex)
-        else:
-            bd_this['tile_color'].setValue(1717987071)
-
-        bd_this.showControlPanel()
-    else:
-        #bd_that = nuke.createNode('Backdrop_Adjust')
-        bd_that = nuke.createNode('Backdrop_Adjust')
-        bd_that['tile_color'].setValue(1717987071)
-        # z_order Foundry
-        bd_that['z_order'].setValue(0)
-        # z_order Alt
-        #bd_that['z_order'].setValue(-250000)
-        bd_that.showControlPanel()
-
-## Add to the Toolset
-nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='ctrl+b', icon='Backdrop.png', index=3)
-
-## Cover selected nodes' area
-def coverSelectedArea():
-    bd_this = nuke.thisNode()
-    if nuke.selectedNodes():
-
-        nodes = nuke.selectedNodes()
-
-        # Calculate bounds for the backdrop node.
-        bdX = min([node.xpos() for node in nodes])
-        bdY = min([node.ypos() for node in nodes])
-        bdW = max([node.xpos() + node.screenWidth() for node in nodes]) - bdX
-        bdH = max([node.ypos() + node.screenHeight() for node in nodes]) - bdY
-
-        # Expand the bounds to leave a little border. Elements are offsets for left, top, right and bottom edges respectively
-        left, top, right, bottom = (-100, -200, 100, 100)
-        bdX += left
-        bdY += top
-        bdW += (right - left)
-        bdH += (bottom - top)
-
-        # Applying the values
-        bd_this["xpos"].setValue(bdX)
-        bd_this["bdwidth"].setValue(bdW)
-        bd_this["ypos"].setValue(bdY)
-        bd_this["bdheight"].setValue(bdH)
-
-        # z_order Foundry
-        if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            pass
-
-        # z_order Alt
-        # if nuke.selectedNodes('BackdropNode'):
-        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-        # else:
-        #     bd_this['z_order'].setValue(0)
-
-    else:
-        nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
-
-## Extend selected nodes' area
-def extendSelectedArea():
-    bd_this = nuke.thisNode()
-    if nuke.selectedNodes():
-        nodes = nuke.selectedNodes()
-
-        # Calculate bounds for the backdrop node.
-        bdX = min([node.xpos() for node in nodes])
-        bdY = min([node.ypos() for node in nodes])
-        bdW = max([node.xpos() + node.screenWidth() for node in nodes]) - bdX
-        bdH = max([node.ypos() + node.screenHeight() for node in nodes]) - bdY
-
-        # Expand the bounds to leave a little border. Elements are offsets for left, top, right and bottom edges respectively
-        left, top, right, bottom = (-100, -200, 100, 100)
-        bdX += left
-        bdY += top
-        bdW += (right - left)
-        bdH += (bottom - top)
-
-        # Applying the values
-        if bd_this['xpos'].value() > (bdX):
-            bd_this["bdwidth"].setValue(bd_this['bdwidth'].value() + (bd_this['xpos'].value() - bdX))
-            bd_this["xpos"].setValue(bdX)
-        if bd_this['ypos'].value() > (bdY):
-            bd_this["bdheight"].setValue(bd_this['bdheight'].value() + (bd_this['ypos'].value() - bdY))
-            bd_this["ypos"].setValue(bdY)
-        if (bd_this['xpos'].value() + bd_this['bdwidth'].value()) < (bdW + bdX):
-            relW = (bdW + bdX)
-            rel_thisW = int(bd_this['xpos'].value()) + int(bd_this['bdwidth'].value())
-            bd_this["bdwidth"].setValue(bd_this['bdwidth'].value() + (relW - rel_thisW))
-        if (bd_this['ypos'].value() + bd_this['bdheight'].value()) < (bdH + bdY):
-            relH = (bdH + bdY)
-            rel_thisH = int(bd_this['ypos'].value()) + int(bd_this['bdheight'].value())
-            bd_this["bdheight"].setValue(bd_this['bdheight'].value() + (relH - rel_thisH))
-
-        # z_order Foundry
-        if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            pass
-
-        # z_order Alt
-        # if nuke.selectedNodes('BackdropNode'):
-        #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-        # else:
-        #     bd_this['z_order'].setValue(0)
-
-    else:
-        nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
-
-
-def fontPlusTen():
-    curr_size = nuke.thisNode()['note_font_size'].value()
-    nuke.thisNode()['note_font_size'].setValue(curr_size + 10)
-
-
-def fontMinusTen():
-    curr_size = nuke.thisNode()['note_font_size'].value()
-    nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
-
-## Vivid/Dull palette knob
-def dullVividColor():
-    dull = '<big><font style="background-color:#806060;">D<font style="background-color:#807460;">u<font style="background-color:#778060;">l<font style="background-color:#608071;">l<font style="background-color:#607a80;"> <font style="background-color:#606680;">C<font style="background-color:#606680;">o<font style="background-color:#6d6080;">l<font style="background-color:#80607d;">o<font style="background-color:#806069;">r<font style="background-color:#806060;">s'
-
-    vivid = '<big><font style="background-color:#994d4d;">V<font style="background-color:#997d4d;">i<font style="background-color:#85994d;">v<font style="background-color:#55994d;">i<font style="background-color:#4d9976;">d<font style="background-color:#4d8c99;"> <font style="background-color:#4d5c99;">C<font style="background-color:#6e4d99;">o<font style="background-color:#994d94;">l<font style="background-color:#994d63;">o<font style="background-color:#994d4d;">r<font style="background-color:#997d4d;">s'
-
-    knob = nuke.thisKnob()
-    node = nuke.thisNode()
-    options = [dull, vivid]
-    knob.setLabel(options[int(knob.label() == options[0])])
-
-    dull_colors = ['2153799680', '2155110400', '2004901888', '1669357568', '1619030272', '1618640896', '1617330176',
-                   '1835040768', '2153807104', '2153801984']
-
-    dull_colors_hex = ['806060', '807460', '778060', '638060', '608071', '607a80', '606680', '6d6080', '80607d',
-                       '806069']
-
-    vivid_colors = ['2571980032', '2575125760', '2241416448', '1436110080', '1301902848', '1301059840', '1297914112',
-                    '1850579200', '2571998208', '2571985664']
-
-    vivid_colors_hex = ['994d4d', '997d4d', '85994d', '55994d', '4d9976', '4d8c99', '4d5c99', '6e4d99', '994d94',
-                        '994d63']
-
-    knob_names = ["color_{}".format(x) for x in range(10)]
-
-    if knob.label() == dull:
-        items = zip(dull_colors, dull_colors_hex)
-    else:
-        items = zip(vivid_colors, vivid_colors_hex)
-
-    for i, (color, hex_color) in enumerate(items):
-        node[knob_names[i]].setLabel("<font color=#{}><big>█</big></font>".format(hex_color))
-        node[knob_names[i]].setValue("nuke.thisNode()['tile_color'].setValue({})".format(color))
-
-## Darken tile_color
-def darkenTileColor():
-    # getting tile_color value
-    dec_til = nuke.thisNode()['tile_color'].value()
-
-    # dec to hex
-    hex_til = hex(dec_til)[2:8]
-
-    # hex to RGB
-    rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
-
-    # rgb to hls
-    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
-
-    # adjust luma value
-    l = l - .025
-
-    # hls to rgb with clamped luma
-    (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
-
-    # rgb to hex
-    new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
-
-    # hex to decimal
-    nukeHex = int(new_hex + "00", 16)
-
-    # applying new tile_color
-    nuke.thisNode()['tile_color'].setValue(nukeHex)
-
-## Brighten tile_color
-def brightenTileColor():
-    # getting tile_color value
-    dec_til = nuke.thisNode()['tile_color'].value()
-
-    # dec to hex
-    hex_til = hex(dec_til)[2:8]
-
-    # hex to RGB
-    rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
-
-    # rgb to hls
-    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
-
-    # adjust luma value
-    l = l + .025
-
-    # hls to rgb with clamped luma
-    (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
-
-    # rgb to hex
-    new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
-
-    # hex to decimal
-    nukeHex = int(new_hex + "00", 16)
-
-    # applying new tile_color
-    nuke.thisNode()['tile_color'].setValue(nukeHex)
-
-
-def addY100():
-    bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def addY500():
-    bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def takeY100():
-    bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def takeY500():
-    bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def addX100():
-    bd_this = nuke.thisNode()
-    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def addX500():
-    bd_this = nuke.thisNode()
-    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def takeX100():
-    bd_this = nuke.thisNode()
-    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-
-def takeX500():
-    bd_this = nuke.thisNode()
-    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
-
-    # z_order Foundry
-    if nuke.selectedNodes('BackdropNode'):
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-    else:
-        pass
-
-    # z_order Alt
-    # if nuke.selectedNodes('BackdropNode'):
-    #     bd_this['z_order'].setValue(zOrderAlt(bd_this))
-    # else:
-    #     bd_this['z_order'].setValue(0)
-
-def openWebsite():
-    webbrowser.open('https://www.gatimedia.co.uk/backdrop-adjust', new=2)
+BackdropNode {
+ inputs 0
+ name Backdrop_Adjust1
+ label "<p align=\"\[value align]\"><font color=\[value note_color]>\[if \{\[value strike]==true && \[value under]==true\} \{return <s><u>\[value note]\} \{return \"\"\}] \[if \{\[value strike]==false && \[value under]==false\} \{return \[value note]\} \{return \"\"\}]  \[if \{\[value strike]==true && \[value under]==false\} \{return <s>\[value note]\} \{return \"\"\}]  \[if \{\[value strike]==false && \[value under]==true\} \{return <u>\[value note]\} \{return \"\"\}]"
+ note_font "MS Shell Dlg 2 Bold"
+ note_font_size 72
+ selected true
+ xpos 22396
+ ypos 710
+ bdwidth 500
+ bdheight 500
+ addUserKnob {20 User}
+ addUserKnob {22 cover l "<big><font color=yellow>Cover Selected Area</big></font>" T coverSelectedArea() +STARTLINE}
+ addUserKnob {26 _1 l "" -STARTLINE T "   "}
+ addUserKnob {22 extend l "<big><font color=yellow>Extend to Selected Area</big></font>" -STARTLINE T extendSelectedArea()}
+ addUserKnob {26 label_1 l <b>Label</b>}
+ addUserKnob {43 note l Note}
+ addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
+ note_color Black
+ addUserKnob {4 align l Align -STARTLINE M {Center Left Right "" "" ""}}
+ addUserKnob {6 under l Underline -STARTLINE}
+ addUserKnob {6 strike l Strikethrough -STARTLINE}
+ addUserKnob {26 font_size l "Note size"}
+ addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10</font>" -STARTLINE T fontPlusTen()}
+ addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10</font>" -STARTLINE T fontMinusTen()}
+ addUserKnob {26 tasks l <b>Tasks</b>}
+ addUserKnob {22 plate l "<big><font style=\"background-color:#559d63;\">&nbsp;<font color=black>Plate</font>&nbsp;" T "# plate\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1436110080)\nbd\['note'].setValue('PLATE')\nbd\['note_font_size'].setValue(102)\nbd\['note_color'].setValue('Black')" +STARTLINE}
+ addUserKnob {22 denoise l "<big><font style=\"background-color:#85994d;\">&nbsp;<font color=black>Denoise</font>&nbsp;" -STARTLINE T "# denoise\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(2241416448)\nbd\['note'].setValue('DENOISE')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')"}
+ addUserKnob {22 reference l "<big><font style=\"background-color:#4d9976;\">&nbsp;<font color=black>Reference</font>&nbsp;" -STARTLINE T "# reference\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1301902848)\nbd\['note'].setValue('REF')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')"}
+ addUserKnob {22 precomp l "<big><font style=\"background-color:#994d63;\">&nbsp;<font color=black>Precomp</font>&nbsp;" T "# precomp\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(2571985664)\nbd\['note'].setValue('PRECOMP')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')" +STARTLINE}
+ addUserKnob {22 merge l "<big><font style=\"background-color:#4d8c99;\">&nbsp;<font color=black>Merge</font>&nbsp;" -STARTLINE T "# merge\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1301059840)\nbd\['note'].setValue('MERGE')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')"}
+ addUserKnob {22 versions l "<big><font style=\"background-color:#777777;\">&nbsp;<font color=black>Versions</font>&nbsp;" -STARTLINE T "# versions\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1717987071)\nbd\['note'].setValue('VERSIONS')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')"}
+ addUserKnob {22 Foreground l "<big><font style=\"background-color:#777777;\">&nbsp;<font color=black>Foreground</font>&nbsp;" T "# fg\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1717987071)\nbd\['note'].setValue('FG')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')\n" +STARTLINE}
+ addUserKnob {22 background l "<big><font style=\"background-color:#777777;\">&nbsp;<font color=black>Background</font>&nbsp;" -STARTLINE T "# background\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1717987071)\nbd\['note'].setValue('BG')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 threed l "<big><font style=\"background-color:#806069;\">&nbsp;<font color=black>3D</font>&nbsp;" T "# 3d\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(2153801984)\nbd\['note'].setValue('3D')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')\n" +STARTLINE}
+ addUserKnob {22 camera l "<big><font style=\"background-color:#806060;\">&nbsp;<font color=black>Camera</font>&nbsp;" -STARTLINE T "# camera\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2153799680)\nbd\['note'].setValue('CAMERA')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 track l "<big><font style=\"background-color:#80607d;\">&nbsp;<font color=black>Track</font>&nbsp;" -STARTLINE T "# track\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2153807104)\nbd\['note'].setValue('TRACK')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 matte l "<big><font style=\"background-color:#807460;\">&nbsp;<font color=black>DMP</font>&nbsp;" T "# matte\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2155110400)\nbd\['note'].setValue('DMP')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')" +STARTLINE}
+ addUserKnob {22 grade l "<big><font style=\"background-color:#607a80;\">&nbsp;<font color=black>Grade</font>&nbsp;" -STARTLINE T "# grade\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1618640896)\nbd\['note'].setValue('GRADE')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')\n"}
+ addUserKnob {22 lens_effect l "<big><font style=\"background-color:#6d6080;\">&nbsp;<font color=black>Lens Effect</font>&nbsp;" -STARTLINE T "# lens effect\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1835040768)\nbd\['note'].setValue('LENS\\nEFFECT')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 grain l "<big><font style=\"background-color:#AAAAAA;\">&nbsp;<font color=black>Grain</font>&nbsp;" T "# grain\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2576980479)\nbd\['note'].setValue('GRAIN')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('White')" +STARTLINE}
+ addUserKnob {22 key l "<big><font style=\"background-color:#608071;\">&nbsp;<font color=black>Key</font>&nbsp;" -STARTLINE T "# key\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1619030272)\nbd\['note'].setValue('KEY')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 roto l "<big><font style=\"background-color:#638060;\">&nbsp;<font color=black>Roto</font>&nbsp;" -STARTLINE T "# roto\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(1669357568)\nbd\['note'].setValue('ROTO')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {22 prep l "<big><font style=\"background-color:#778060;\">&nbsp;<font color=black>Prep</font>&nbsp;" -STARTLINE T "# prep\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2004901888)\nbd\['note'].setValue('PREP')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
+ addUserKnob {26 node_color l "<b>Node Color</b>"}
+ addUserKnob {22 change_colors l "<big><font style=\"background-color:#806060;\">D<font style=\"background-color:#807460;\">u<font style=\"background-color:#778060;\">l<font style=\"background-color:#608071;\">l<font style=\"background-color:#607a80;\"> <font style=\"background-color:#606680;\">C<font style=\"background-color:#606680;\">o<font style=\"background-color:#6d6080;\">l<font style=\"background-color:#80607d;\">o<font style=\"background-color:#806069;\">r<font style=\"background-color:#806060;\">s" t "By clicking on it can toggle between the \"Dull Colors\" and the \"Vivid Colors\" palettes" T dullVividColor() +STARTLINE}
+ addUserKnob {22 darken l "<big><font style=\"background-color:#333333;\">&nbsp;<font color=#cccccc>Darken</font>&nbsp;" -STARTLINE T darkenTileColor()}
+ addUserKnob {22 brighten l "<big><font style=\"background-color:#aaaaaa;\">&nbsp;<font color=black>Brighten</font>&nbsp;" -STARTLINE T brightenTileColor()}
+ addUserKnob {22 color_0 l "<font color=#806060><big>█</big></font>" T "nuke.thisNode()\['tile_color'].setValue(2153799680)" +STARTLINE}
+ addUserKnob {22 color_1 l "<font color=#807460><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2155110400)"}
+ addUserKnob {22 color_2 l "<font color=#778060><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2004901888)"}
+ addUserKnob {22 color_3 l "<font color=#638060><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1669357568)"}
+ addUserKnob {22 color_4 l "<font color=#608071><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1619030272)"}
+ addUserKnob {22 color_5 l "<font color=#607a80><big>█</big></font>" T "nuke.thisNode()\['tile_color'].setValue(1618640896)" +STARTLINE}
+ addUserKnob {22 color_6 l "<font color=#606680><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1617330176)"}
+ addUserKnob {22 color_7 l "<font color=#6d6080><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1835040768)"}
+ addUserKnob {22 color_8 l "<font color=#80607d><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2153807104)"}
+ addUserKnob {22 color_9 l "<font color=#806069><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2153801984)"}
+ addUserKnob {22 grey_1 l "<font color=#DDDDDD><big>█</big></font>" T "nuke.thisNode()\['tile_color'].setValue(3149642751)" +STARTLINE}
+ addUserKnob {22 grey_2 l "<font color=#AAAAAA><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2576980479)"}
+ addUserKnob {22 grey_3 l "<font color=#777777><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1717987071)"}
+ addUserKnob {22 grey_4 l "<font color=#333333><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(1145324799)"}
+ addUserKnob {22 grey_5 l "<font color=#222222><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(572662527)"}
+ addUserKnob {20 re_size l "Re Size" n 1}
+ re_size 0
+ addUserKnob {26 y l Height}
+ addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100</font>" T addY100() +STARTLINE}
+ addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500</font>" -STARTLINE T addY500()}
+ addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100</font>" T takeY100() +STARTLINE}
+ addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500</font>" -STARTLINE T takeY500()}
+ addUserKnob {26 x l Width}
+ addUserKnob {22 add_x_100 l "<font color=orange>Add X 100</font>" T addX100() +STARTLINE}
+ addUserKnob {22 add_x_500 l "<font color=orange>Add X 500</font>" -STARTLINE T addX500()}
+ addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100</font>" T takeX100() +STARTLINE}
+ addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500</font>" -STARTLINE T takeX500()}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.6 version</font>"}
+ addUserKnob {26 _2 l "" -STARTLINE T "   "}
+ addUserKnob {22 info l Tutorial/Info -STARTLINE T openWebsite()}
+ addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}
+}

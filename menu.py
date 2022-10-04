@@ -1,3 +1,4 @@
+#encoding=utf-8
 # --------------------------------------------------------------
 #  BackdropAdjust menu.py
 #  Version: 1.6

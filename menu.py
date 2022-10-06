@@ -163,6 +163,8 @@ def coverSelectedArea():
         bd_this["bdwidth"].setValue(bdW)
         bd_this["ypos"].setValue(bdY)
         bd_this["bdheight"].setValue(bdH)
+        
+        # Select the BD node along with the already selected nodes so can grab and move easier
         bd_this.setSelected(True)
 
         # z_order Foundry
@@ -214,6 +216,8 @@ def extendSelectedArea():
             relH = (bdH + bdY)
             rel_thisH = int(bd_this['ypos'].value()) + int(bd_this['bdheight'].value())
             bd_this["bdheight"].setValue(bd_this['bdheight'].value() + (relH - rel_thisH))
+        
+        # Selecting the BD node and the ones already on it along with the already selected ones so can grab and move easier
         for n in bd_this.getNodes():
             n.setSelected(True)
         bd_this.setSelected(True)

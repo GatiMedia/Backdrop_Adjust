@@ -214,6 +214,8 @@ def extendSelectedArea():
             relH = (bdH + bdY)
             rel_thisH = int(bd_this['ypos'].value()) + int(bd_this['bdheight'].value())
             bd_this["bdheight"].setValue(bd_this['bdheight'].value() + (relH - rel_thisH))
+        for n in bd_this.getNodes():
+            n.setSelected(True)
         bd_this.setSelected(True)
 
         # z_order Foundry

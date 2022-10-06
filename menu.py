@@ -285,7 +285,7 @@ def darkenTileColor():
     rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
 
     # rgb to hls
-    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
+    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0)
 
     # adjust luma value
     l = l - .025
@@ -294,7 +294,7 @@ def darkenTileColor():
     (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
 
     # rgb to hex
-    new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+    new_hex = '%02x%02x%02x' % (int(r * 255.0), int(g * 255.0), int(b * 255.0))
 
     # hex to decimal
     nukeHex = int(new_hex + "00", 16)
@@ -314,7 +314,7 @@ def brightenTileColor():
     rgb = tuple(int(hex_til[i:i + 2], 16) for i in (0, 2, 4))
 
     # rgb to hls
-    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
+    (h, l, s) = colorsys.rgb_to_hls(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0)
 
     # adjust luma value
     l = l + .025
@@ -323,7 +323,7 @@ def brightenTileColor():
     (r, g, b) = colorsys.hls_to_rgb(h, max(min(l, .8), .08), s)
 
     # rgb to hex
-    new_hex = '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+    new_hex = '%02x%02x%02x' % (int(r * 255.0), int(g * 255.0), int(b * 255.0))
 
     # hex to decimal
     nukeHex = int(new_hex + "00", 16)

@@ -163,6 +163,7 @@ def coverSelectedArea():
         bd_this["bdwidth"].setValue(bdW)
         bd_this["ypos"].setValue(bdY)
         bd_this["bdheight"].setValue(bdH)
+        bd_this.setSelected(True)
 
         # z_order Foundry
         if nuke.selectedNodes('BackdropNode'):
@@ -213,6 +214,7 @@ def extendSelectedArea():
             relH = (bdH + bdY)
             rel_thisH = int(bd_this['ypos'].value()) + int(bd_this['bdheight'].value())
             bd_this["bdheight"].setValue(bd_this['bdheight'].value() + (relH - rel_thisH))
+        bd_this.setSelected(True)
 
         # z_order Foundry
         if nuke.selectedNodes('BackdropNode'):

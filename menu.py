@@ -136,7 +136,7 @@ def create_BD_Adj():
         bd_that.showControlPanel()
 
 ## Add to the Toolset
-nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='ctrl+b', icon='Backdrop.png', index=3)
+nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='Shift+b', icon='Backdrop.png', index=3)
 
 ## Cover selected nodes' area
 def coverSelectedArea():

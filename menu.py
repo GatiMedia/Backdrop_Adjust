@@ -142,7 +142,7 @@ nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj(
 def coverSelectedArea():
     bd_this = nuke.thisNode()
     if nuke.selectedNodes():
-
+        bd_this.setSelected(False)
         nodes = nuke.selectedNodes()
 
         # Calculate bounds for the backdrop node.
@@ -186,6 +186,7 @@ def coverSelectedArea():
 def extendSelectedArea():
     bd_this = nuke.thisNode()
     if nuke.selectedNodes():
+        bd_this.setSelected(False)
         nodes = nuke.selectedNodes()
 
         # Calculate bounds for the backdrop node.

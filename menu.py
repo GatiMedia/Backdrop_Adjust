@@ -46,6 +46,33 @@ def zOrderAlt(node):
     zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
     return (zOrderA)
 
+# Creating PyPanel popup for createBDApopup
+class CreateBDAdjust(nukescripts.PythonPanel):
+    def __init__(self):
+        nukescripts.PythonPanel.__init__(self, 'Create Backdrop_Adjust')
+        self.setMinimumSize(400, 150)
+
+        self.spaceKnob = nuke.Text_Knob('space1', '')
+        self.addKnob(self.spaceKnob)
+
+        self.noteKnob = nuke.EvalString_Knob('note', 'Label/Note')
+        self.addKnob(self.noteKnob)
+
+        self.tasks = ['none', 'Plate/green', 'Denoise/olive', 'Reference/teal', 'Precomp/red', 'Merge/aqua', 'Output/brown', 'FG/grey', 'BG/grey', 'Versions/grey', '3d/red', 'Camera/maroon', 'Track/purple', 'DMP/brown', 'Grade/blue', 'Lens Effect/purple', 'Key/teal', 'Roto/green', 'Prep/olive', 'Grain/white']
+        self.tasksKnob = nuke.Enumeration_Knob('tasks', 'Tasks', self.tasks)
+        #self.tasksKnob.clearFlag(nuke.STARTLINE)
+        self.addKnob(self.tasksKnob)
+
+        self.spaceKnob = nuke.Text_Knob('space2', '')
+        self.addKnob(self.spaceKnob)
+
+        self.infoKnob = nuke.Text_Knob('info', '')
+        self.infoKnob.setValue('<p style="font-size:20px">&#128221; Thanks for organizing your script!</p>')
+        self.addKnob(self.infoKnob)
+
+        self.spaceKnob = nuke.Text_Knob('space3', '')
+        self.addKnob(self.spaceKnob)
+
 ## The main function
 def create_BD_Adj():
     if nuke.selectedNodes():
@@ -137,6 +164,28 @@ def create_BD_Adj():
 
 ## Add to the Toolset
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='Shift+b', icon='Backdrop.png', index=3)
+
+def createBDApopup():
+    p = CreateBDAdjust()
+    if p.showModalDialog():
+        newNote = p.noteKnob.value()
+        newTask = p.tasksKnob.value()
+
+    index = p.tasks.index(newTask) - 1
+
+    taskColor = ['1436110080', '2241416448', '1301902848', '2571985664', '1301059840', '2575125760', '1717987071', '1717987071', '1717987071', '2153801984', '2153799680', '2153807104', '2155110400', '1618640896', '1835040768', '1619030272', '1669357568', '2004901888', '2576980479'][index]
+
+    taskName = ['PLATE', 'DENOISE', 'REF', 'PRECOMP', 'MERGE', 'OUTPUT', 'FG', 'BG', 'VERSIONS', '3D', 'CAMERA', 'TRACK', 'DMP', 'GRADE', 'LENS\nEFFECT', 'KEY', 'ROTO', 'PREP', 'GRAIN'][index]
+
+    bd = create_BD_Adj()
+    if not newTask == "none":
+        bd['note'].setValue(taskName)
+        bd['tile_color'].setValue(int(taskColor))
+    if newNote:
+        bd['note'].setValue(newNote)
+
+## Add to the Toolset
+nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'createBDApopup()', shortcut='Ctrl+Shift+b', icon='Backdrop.png', index=4)
 
 ## Cover selected nodes' area
 def coverSelectedArea():

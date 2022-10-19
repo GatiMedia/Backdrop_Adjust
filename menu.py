@@ -171,18 +171,18 @@ def createBDApopup():
         newNote = p.noteKnob.value()
         newTask = p.tasksKnob.value()
 
-    index = p.tasks.index(newTask) - 1
+        index = p.tasks.index(newTask) - 1
 
-    taskColor = ['1436110080', '2241416448', '1301902848', '2571985664', '1301059840', '2575125760', '1717987071', '1717987071', '1717987071', '2153801984', '2153799680', '2153807104', '2155110400', '1618640896', '1835040768', '1619030272', '1669357568', '2004901888', '2576980479'][index]
+        taskColor = ['1436110080', '2241416448', '1301902848', '2571985664', '1301059840', '2575125760', '1717987071', '1717987071', '1717987071', '2153801984', '2153799680', '2153807104', '2155110400', '1618640896', '1835040768', '1619030272', '1669357568', '2004901888', '2576980479'][index]
 
-    taskName = ['PLATE', 'DENOISE', 'REF', 'PRECOMP', 'MERGE', 'OUTPUT', 'FG', 'BG', 'VERSIONS', '3D', 'CAMERA', 'TRACK', 'DMP', 'GRADE', 'LENS\nEFFECT', 'KEY', 'ROTO', 'PREP', 'GRAIN'][index]
+        taskName = ['PLATE', 'DENOISE', 'REF', 'PRECOMP', 'MERGE', 'OUTPUT', 'FG', 'BG', 'VERSIONS', '3D', 'CAMERA', 'TRACK', 'DMP', 'GRADE', 'LENS\nEFFECT', 'KEY', 'ROTO', 'PREP', 'GRAIN'][index]
 
-    bd = create_BD_Adj()
-    if not newTask == "none":
-        bd['note'].setValue(taskName)
-        bd['tile_color'].setValue(int(taskColor))
-    if newNote:
-        bd['note'].setValue(newNote)
+        bd = create_BD_Adj()
+        if not newTask == "none":
+            bd['note'].setValue(taskName)
+            bd['tile_color'].setValue(int(taskColor))
+        if newNote:
+            bd['note'].setValue(newNote)
 
 ## Add to the Toolset
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'createBDApopup()', shortcut='Ctrl+Shift+b', icon='Backdrop.png', index=4)

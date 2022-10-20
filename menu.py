@@ -182,7 +182,7 @@ def createBDApopup():
             bd['note'].setValue(taskName)
             bd['tile_color'].setValue(int(taskColor))
         if newNote:
-            bd['note'].setValue(newNote)
+            bd['note'].setValue(newNote.capitalize())
 
 ## Add to the Toolset
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'createBDApopup()', shortcut='Ctrl+Shift+b', icon='Backdrop.png', index=4)

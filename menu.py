@@ -163,7 +163,7 @@ def create_BD_Adj():
         bd_that.showControlPanel()
 
 ## Add to the Toolset
-nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='Shift+b', icon='Backdrop.png', index=3)
+nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'create_BD_Adj()', shortcut='Alt+b', icon='Backdrop.png', index=3)
 
 def createBDApopup():
     p = CreateBDAdjust()
@@ -185,7 +185,7 @@ def createBDApopup():
             bd['note'].setValue(newNote.capitalize())
 
 ## Add to the Toolset
-nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'createBDApopup()', shortcut='Ctrl+Shift+b', icon='Backdrop.png', index=4)
+nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'createBDApopup()', shortcut='Alt+Shift+b', icon='Backdrop.png', index=4)
 
 ## Cover selected nodes' area
 def coverSelectedArea():

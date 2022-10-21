@@ -8,6 +8,7 @@
 
 ## Imports
 import nuke
+import nukescripts
 import colorsys
 import webbrowser
 

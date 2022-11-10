@@ -3,14 +3,14 @@ BackdropNode {
  name Backdrop_Adjust1
  label "<p align=\"\[value align]\"><font color=\[value note_color]>\[if \{\[value strike]==true && \[value under]==true\} \{return <s><u>\[value note]\} \{return \"\"\}] \[if \{\[value strike]==false && \[value under]==false\} \{return \[value note]\} \{return \"\"\}]  \[if \{\[value strike]==true && \[value under]==false\} \{return <s>\[value note]\} \{return \"\"\}]  \[if \{\[value strike]==false && \[value under]==true\} \{return <u>\[value note]\} \{return \"\"\}]"
  note_font "MS Shell Dlg 2 Bold"
- note_font_size 82
+ note_font_size 72
  selected true
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}
- addUserKnob {22 cover l "<big><font color=yellow>Cover Selected Area</big></font>" T coverSelectedArea() +STARTLINE}
+ addUserKnob {22 cover l "<big><font color=yellow>Cover Selected Area</big></font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.coverSelectedArea()" +STARTLINE}
  addUserKnob {26 _1 l "" -STARTLINE T "   "}
- addUserKnob {22 extend l "<big><font color=yellow>Extend to Selected Area</big></font>" -STARTLINE T extendSelectedArea()}
+ addUserKnob {22 extend l "<big><font color=yellow>Extend to Selected Area</big></font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.extendSelectedArea()"}
  addUserKnob {26 label_1 l <b>Label</b>}
  addUserKnob {43 note l Note}
  addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
@@ -19,8 +19,8 @@ BackdropNode {
  addUserKnob {6 under l Underline -STARTLINE}
  addUserKnob {6 strike l Strikethrough -STARTLINE}
  addUserKnob {26 font_size l "Note size"}
- addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10</font>" -STARTLINE T fontPlusTen()}
- addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10</font>" -STARTLINE T fontMinusTen()}
+ addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.fontPlusTen()"}
+ addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.fontMinusTen()"}
  addUserKnob {26 tasks l <b>Tasks</b>}
  addUserKnob {22 plate l "<big><font style=\"background-color:#559d63;\">&nbsp;<font color=black>Plate</font>&nbsp;" T "# plate\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(1436110080)\nbd\['note'].setValue('PLATE')\nbd\['note_font_size'].setValue(102)\nbd\['note_color'].setValue('Black')" +STARTLINE}
  addUserKnob {22 denoise l "<big><font style=\"background-color:#85994d;\">&nbsp;<font color=black>Denoise</font>&nbsp;" -STARTLINE T "# denoise\n\nbd = nuke.thisNode()\nbd\['tile_color'].setValue(2241416448)\nbd\['note'].setValue('DENOISE')\nbd\['note_font_size'].setValue(82)\nbd\['note_color'].setValue('Black')"}
@@ -42,9 +42,9 @@ BackdropNode {
  addUserKnob {22 prep l "<big><font style=\"background-color:#778060;\">&nbsp;<font color=black>Prep</font>&nbsp;" -STARTLINE T "# prep\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2004901888)\nbd\['note'].setValue('PREP')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
  addUserKnob {22 grain l "<big><font style=\"background-color:#AAAAAA;\">&nbsp;<font color=black>Grain</font>&nbsp;" -STARTLINE T "# grain\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2576980479)\nbd\['note'].setValue('GRAIN')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('White')"}
  addUserKnob {26 node_color l "<b>Node Color</b>"}
- addUserKnob {22 change_colors l "<big><font style=\"background-color:#806060;\">D<font style=\"background-color:#807460;\">u<font style=\"background-color:#778060;\">l<font style=\"background-color:#608071;\">l<font style=\"background-color:#607a80;\"> <font style=\"background-color:#606680;\">C<font style=\"background-color:#606680;\">o<font style=\"background-color:#6d6080;\">l<font style=\"background-color:#80607d;\">o<font style=\"background-color:#806069;\">r<font style=\"background-color:#806060;\">s" t "By clicking on it can toggle between the \"Dull Colors\" and the \"Vivid Colors\" palettes" T dullVividColor() +STARTLINE}
- addUserKnob {22 darken l "<big><font style=\"background-color:#333333;\">&nbsp;<font color=#cccccc>Darken</font>&nbsp;" -STARTLINE T darkenTileColor()}
- addUserKnob {22 brighten l "<big><font style=\"background-color:#aaaaaa;\">&nbsp;<font color=black>Brighten</font>&nbsp;" -STARTLINE T brightenTileColor()}
+ addUserKnob {22 change_colors l "<big><font style=\"background-color:#806060;\">D<font style=\"background-color:#807460;\">u<font style=\"background-color:#778060;\">l<font style=\"background-color:#608071;\">l<font style=\"background-color:#607a80;\"> <font style=\"background-color:#606680;\">C<font style=\"background-color:#606680;\">o<font style=\"background-color:#6d6080;\">l<font style=\"background-color:#80607d;\">o<font style=\"background-color:#806069;\">r<font style=\"background-color:#806060;\">s" t "By clicking on it can toggle between the \"Dull Colors\" and the \"Vivid Colors\" palettes" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.dullVividColor()" +STARTLINE}
+ addUserKnob {22 darken l "<big><font style=\"background-color:#333333;\">&nbsp;<font color=#cccccc>Darken</font>&nbsp;" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.darkenTileColor()"}
+ addUserKnob {22 brighten l "<big><font style=\"background-color:#aaaaaa;\">&nbsp;<font color=black>Brighten</font>&nbsp;" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.brightenTileColor()"}
  addUserKnob {22 color_0 l "<font color=#806060><big>█</big></font>" T "nuke.thisNode()\['tile_color'].setValue(2153799680)" +STARTLINE}
  addUserKnob {22 color_1 l "<font color=#807460><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2155110400)"}
  addUserKnob {22 color_2 l "<font color=#778060><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(2004901888)"}
@@ -63,19 +63,19 @@ BackdropNode {
  addUserKnob {20 re_size l "Re Size" n 1}
  re_size 0
  addUserKnob {26 y l Height}
- addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100</font>" T addY100() +STARTLINE}
- addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500</font>" -STARTLINE T addY500()}
- addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100</font>" T takeY100() +STARTLINE}
- addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500</font>" -STARTLINE T takeY500()}
+ addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addY100()" +STARTLINE}
+ addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addY500()"}
+ addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeY100()" +STARTLINE}
+ addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeY500()"}
  addUserKnob {26 x l Width}
- addUserKnob {22 add_x_100 l "<font color=orange>Add X 100</font>" T addX100() +STARTLINE}
- addUserKnob {22 add_x_500 l "<font color=orange>Add X 500</font>" -STARTLINE T addX500()}
- addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100</font>" T takeX100() +STARTLINE}
- addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500</font>" -STARTLINE T takeX500()}
+ addUserKnob {22 add_x_100 l "<font color=orange>Add X 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addX100()" +STARTLINE}
+ addUserKnob {22 add_x_500 l "<font color=orange>Add X 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addX500()"}
+ addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeX100()" +STARTLINE}
+ addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeX500()"}
  addUserKnob {20 endGroup n -1}
  addUserKnob {26 ""}
  addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.6 version</font>"}
  addUserKnob {26 _2 l "" -STARTLINE T "   "}
- addUserKnob {22 info l Tutorial/Info -STARTLINE T openWebsite()}
+ addUserKnob {22 info l Tutorial/Info -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.openWebsite()"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}
 }

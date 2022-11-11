@@ -12,9 +12,9 @@ import colorsys
 import nukescripts
 import os
 
-######################################
-### FUNCTIONS CREATING ON THE NODE ###
-######################################
+###################################
+### FUNCTIONS CREATING THE NODE ###
+###################################
 
 ## Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
 def zOrderFoundry(node):

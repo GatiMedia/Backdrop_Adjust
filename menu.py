@@ -13,4 +13,4 @@ import Backdrop_Adjust_utils
 nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust', 'Backdrop_Adjust_utils.create_BD_Adj()', shortcut='Alt+b', icon='Backdrop.png', index=3)
 
 ## Add BackdropAdjust(popup) the Toolset
-nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust(popup)', 'Backdrop_Adjust_utils.createBDApopup()', shortcut='Alt+Shift+b', icon='Backdrop.png', index=4)
+nuke.menu('Nodes').addMenu('Other').addCommand('BackdropAdjust (popup)', 'Backdrop_Adjust_utils.createBDApopup()', shortcut='Alt+Shift+b', icon='Backdrop.png', index=4)

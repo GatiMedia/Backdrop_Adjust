@@ -1,8 +1,8 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
-#  Version: 1.6
-#  Last Updated: 10/11/2022
+#  Version: 1.7
+#  Last Updated: 14/11/2022
 # --------------------------------------------------------------
 
 ## Imports
@@ -12,9 +12,9 @@ import colorsys
 import nukescripts
 import os
 
-###################################
-### FUNCTIONS CREATING THE NODE ###
-###################################
+######################################
+### FUNCTIONS CREATING ON THE NODE ###
+######################################
 
 ## Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
 def zOrderFoundry(node):
@@ -303,12 +303,17 @@ def extendSelectedArea():
 
 def fontPlusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
-    nuke.thisNode()['note_font_size'].setValue(curr_size + 10)
-
+    if curr_size < 192:
+       nuke.thisNode()['note_font_size'].setValue(curr_size + 10)
+    else:
+        pass
 
 def fontMinusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
-    nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
+    if curr_size > 192:
+        nuke.thisNode()['note_font_size'].setValue(182)
+    else:
+        nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
 
 ## Vivid/Dull palette knob
 def dullVividColor():
@@ -403,37 +408,271 @@ def brightenTileColor():
     # applying new tile_color
     nuke.thisNode()['tile_color'].setValue(nukeHex)
 
-def addY100():
+def newSelection():
     bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    for n in nuke.allNodes():
+        n.setSelected(False)
+    for n in bd_this.getNodes():
+        n.setSelected(True)
+    bd_this.setSelected(True)
 
-def addY500():
+### UPSCALE ###
+
+## upleft500
+def upleft500():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    newSelection()
 
-def takeY100():
+## up500
+def up500():
     bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
+    newSelection()
 
-def takeY500():
+## upright500
+def upright500():
     bd_this = nuke.thisNode()
-    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    newSelection()
 
-def addX100():
+## upleft100
+def upleft100():
     bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    newSelection()
 
-def addX500():
+## up100
+def up100():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
+    newSelection()
+
+## upright100
+def upright100():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    newSelection()
+
+## left500
+def left500():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    newSelection()
 
-def takeX100():
+## left100
+def left100():
     bd_this = nuke.thisNode()
-    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    newSelection()
 
-def takeX500():
+## center
+def center():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    newSelection()
+
+## right100
+def right100():
+    bd_this = nuke.thisNode()
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    newSelection()
+
+## right500
+def right500():
+    bd_this = nuke.thisNode()
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    newSelection()
+
+## downleft100
+def downleft100():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    newSelection()
+
+## down100
+def down100():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    newSelection()
+
+## downright100
+def downright100():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    newSelection()
+
+## downleft500
+def downleft500():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    newSelection()
+
+## down500
+def down500():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    newSelection()
+
+## downright500
+def downright500():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    newSelection()
+
+### DOWNSCALE ###
+
+## upleft500_2
+def upleft500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    newSelection()
+
+## up500_2
+def up500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
+    newSelection()
+
+## upright500_2
+def upright500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    newSelection()
+
+## upleft100_2
+def upleft100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    newSelection()
+
+## up100_2
+def up100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
+    newSelection()
+
+## upright100_2
+def upright100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    newSelection()
+
+## left500_2
+def left500_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    newSelection()
+
+## left100_2
+def left100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    newSelection()
+
+## center_2
+def center_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    newSelection()
+
+## right100_2
+def right100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    newSelection()
+
+## right500_2
+def right500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    newSelection()
+
+## downleft100_2
+def downleft100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    newSelection()
+
+## down100_2
+def down100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    newSelection()
+
+## downright100_2
+def downright100_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    newSelection()
+
+## downleft500_2
+def downleft500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    newSelection()
+
+## down500_2
+def down500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    newSelection()
+
+## downright500_2
+def downright500_2():
+    bd_this = nuke.thisNode()
+    bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    newSelection()
 
 def openWebsite():
     webbrowser.open('https://www.gatimedia.co.uk/backdrop-adjust', new=2)

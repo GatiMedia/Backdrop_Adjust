@@ -1,10 +1,9 @@
 BackdropNode {
  inputs 0
  name Backdrop_Adjust1
- label "<p align=\"\[value align]\"><font color=\[value note_color]>\[if \{\[value strike]==true && \[value under]==true\} \{return <s><u>\[value note]\} \{return \"\"\}] \[if \{\[value strike]==false && \[value under]==false\} \{return \[value note]\} \{return \"\"\}]  \[if \{\[value strike]==true && \[value under]==false\} \{return <s>\[value note]\} \{return \"\"\}]  \[if \{\[value strike]==false && \[value under]==true\} \{return <u>\[value note]\} \{return \"\"\}]"
- note_font "MS Shell Dlg 2 Bold"
+ label "<p align=\"\[value align]\"><font color=\[value note_color]> \[if \{\[value bold]==true\} \{return <b>\} \{return \"\"\}] \[if \{\[value italian]==true\} \{return <i>\} \{return \"\"\}] \[if \{\[value under]==true\} \{return <u>\} \{return \"\"\}] \[if \{\[value strike]==true\} \{return <s>\} \{return \"\"\}] \[value note]"
+ note_font "MS Shell Dlg 2"
  note_font_size 72
- selected true
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}
@@ -16,8 +15,11 @@ BackdropNode {
  addUserKnob {4 note_color l "Note Color" M {Orange White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple}}
  note_color Black
  addUserKnob {4 align l Align -STARTLINE M {Center Left Right "" "" ""}}
- addUserKnob {6 under l Underline -STARTLINE}
- addUserKnob {6 strike l Strikethrough -STARTLINE}
+ addUserKnob {6 bold l "<b>&nbsp;&nbsp;T" +STARTLINE}
+ bold true
+ addUserKnob {6 italian l "&nbsp;&nbsp;<i>T" -STARTLINE}
+ addUserKnob {6 under l "&nbsp;&nbsp;<u>T" -STARTLINE}
+ addUserKnob {6 strike l "&nbsp;&nbsp;<s>T" -STARTLINE}
  addUserKnob {26 font_size l "Note size"}
  addUserKnob {22 size_plus_10 l "<font color=orange>▲ 10</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.fontPlusTen()"}
  addUserKnob {22 size_min_10 l "<font color=aqua>▼ 10</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.fontMinusTen()"}
@@ -62,19 +64,57 @@ BackdropNode {
  addUserKnob {22 grey_5 l "<font color=#222222><big>█</big></font>" -STARTLINE T "nuke.thisNode()\['tile_color'].setValue(572662527)"}
  addUserKnob {20 re_size l "Re Size" n 1}
  re_size 0
- addUserKnob {26 y l Height}
- addUserKnob {22 add_y_100 l "<font color=orange>Add Y 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addY100()" +STARTLINE}
- addUserKnob {22 add_y_500 l "<font color=orange>Add Y 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addY500()"}
- addUserKnob {22 take_y_100 l "<font color=aqua>Take Y 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeY100()" +STARTLINE}
- addUserKnob {22 take_y_500 l "<font color=aqua>Take Y 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeY500()"}
- addUserKnob {26 x l Width}
- addUserKnob {22 add_x_100 l "<font color=orange>Add X 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addX100()" +STARTLINE}
- addUserKnob {22 add_x_500 l "<font color=orange>Add X 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.addX500()"}
- addUserKnob {22 take_x_100 l "<font color=aqua>Take X 100</font>" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeX100()" +STARTLINE}
- addUserKnob {22 take_x_500 l "<font color=aqua>Take X 500</font>" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.takeX500()"}
+ addUserKnob {26 upscale l Upscale}
+ addUserKnob {22 upleft500 l "<font color=yellow><big>↖" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upleft500()" +STARTLINE}
+ addUserKnob {26 space1 l "" -STARTLINE T "         "}
+ addUserKnob {22 up500 l "<font color=yellow><h3>▲" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.up500()"}
+ addUserKnob {26 space1_1 l "" -STARTLINE T "         "}
+ addUserKnob {22 upright500 l "<font color=yellow><big>↗" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upright500()"}
+ addUserKnob {26 space2 l "" +STARTLINE T "                            "}
+ addUserKnob {22 upleft100 l "<font color=orange><big>↖" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upleft100()"}
+ addUserKnob {22 up100 l "<font color=orange><big>▲" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.up100()"}
+ addUserKnob {22 upright100 l "<font color=orange><big>↗" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upright100()"}
+ addUserKnob {22 left500 l "<font color=yellow><big>◄" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.left500()" +STARTLINE}
+ addUserKnob {22 left100 l "<font color=orange><big>◄" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.left100()"}
+ addUserKnob {22 center1 l "<font color=crimson><big>⦿" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.center()"}
+ addUserKnob {22 right100 l "<font color=orange><big>►" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.right100()"}
+ addUserKnob {22 right500 l "<font color=yellow><big>►" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.right500()"}
+ addUserKnob {26 space3 l "" +STARTLINE T "                            "}
+ addUserKnob {22 downleft100 l "<font color=orange><big>↙" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downleft100()"}
+ addUserKnob {22 down100 l "<font color=orange><big>▼" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.down100()"}
+ addUserKnob {22 downright100 l "<font color=orange><big>↘" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downright100()"}
+ addUserKnob {22 downleft500 l "<font color=yellow><big>↙" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downleft500()" +STARTLINE}
+ addUserKnob {26 space4 l "" -STARTLINE T "         "}
+ addUserKnob {22 down500 l "<font color=yellow><big>▼" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.down500()"}
+ addUserKnob {26 space4_1 l "" -STARTLINE T "         "}
+ addUserKnob {22 downright500 l "<font color=yellow><big>↘" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downright500()"}
+ addUserKnob {26 downscale l Downscale}
+ addUserKnob {22 upleft500_2 l "<font color=LightSkyBlue><big>↘" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upleft500_2()" +STARTLINE}
+ addUserKnob {26 space1_2 l "" -STARTLINE T "         "}
+ addUserKnob {22 up500_2 l "<font color=LightSkyBlue><h3>▼" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.up500_2()"}
+ addUserKnob {26 space1_1_2 l "" -STARTLINE T "         "}
+ addUserKnob {22 upright500_2 l "<font color=LightSkyBlue><big>↙" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upright500_2()"}
+ addUserKnob {26 space2_2 l "" +STARTLINE T "                            "}
+ addUserKnob {22 upleft100_2 l "<font color=SteelBlue><big>↘" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upleft100_2()"}
+ addUserKnob {22 up100_2 l "<font color=SteelBlue><big>▼" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.up100_2()"}
+ addUserKnob {22 upright100_2 l "<font color=SteelBlue><big>↙" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.upright100_2()"}
+ addUserKnob {22 left500_2 l "<font color=LightSkyBlue><big>►" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.left500_2()" +STARTLINE}
+ addUserKnob {22 left100_2 l "<font color=SteelBlue><big>►" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.left100_2()"}
+ addUserKnob {22 center1_2 l "<font color=blue><big>⦿" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.center_2()"}
+ addUserKnob {22 right100_2 l "<font color=SteelBlue><big>◄" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.right100_2()"}
+ addUserKnob {22 right500_2 l "<font color=LightSkyBlue><big>◄" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.right500_2()"}
+ addUserKnob {26 space3_2 l "" +STARTLINE T "                            "}
+ addUserKnob {22 downleft100_2 l "<font color=SteelBlue><big>↗" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downleft100_2()"}
+ addUserKnob {22 down100_2 l "<font color=SteelBlue><big>▲" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.down100_2()"}
+ addUserKnob {22 downright100_2 l "<font color=SteelBlue><big>↖" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downright100_2()"}
+ addUserKnob {22 downleft500_2 l "<font color=LightSkyBlue><big>↗" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downleft500_2()" +STARTLINE}
+ addUserKnob {26 space4_2 l "" -STARTLINE T "         "}
+ addUserKnob {22 down500_2 l "<font color=LightSkyBlue><big>▲" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.down500_2()"}
+ addUserKnob {26 space4_1_2 l "" -STARTLINE T "         "}
+ addUserKnob {22 downright500_2 l "<font color=LightSkyBlue><big>↖" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downright500_2()"}
  addUserKnob {20 endGroup n -1}
  addUserKnob {26 ""}
- addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.6 version</font>"}
+ addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.7 version</font>"}
  addUserKnob {26 _2 l "" -STARTLINE T "   "}
  addUserKnob {22 info l Tutorial/Info -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.openWebsite()"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}

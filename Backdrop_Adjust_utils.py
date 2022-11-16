@@ -2,7 +2,7 @@
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
 #  Version: 1.7
-#  Last Updated: 14/11/2022
+#  Last Updated: 16/11/2022
 # --------------------------------------------------------------
 
 ## Imports
@@ -41,7 +41,9 @@ def zOrderFoundry(node):
         # otherwise (no backdrop in selection) find the nearest backdrop if exists and set the new one in front of it
         nonSelectedBackdropNodes = nuke.allNodes("BackdropNode")
         for nonBackdrop in nodes:
+            print("nonBackdrop is: " + nonBackdrop.name())
             for backdrop in nonSelectedBackdropNodes:
+                print("backdrop is: " + backdrop.name())
                 if nodeIsInside(nonBackdrop, backdrop):
                     zOrderF = max(zOrderF, backdrop.knob("z_order").value() + 1)
     return (zOrderF)
@@ -108,10 +110,7 @@ def create_BD_Adj():
         bd_this["bdheight"].setValue(bdH)
 
         # z_order Foundry
-        if sel_bd:
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            bd_this['z_order'].setValue(0)
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
 
         # z_order Alt
         # if nuke.selectedNodes('BackdropNode'):
@@ -169,7 +168,7 @@ def create_BD_Adj():
         bd_that = nuke.nodePaste(gizmoPath)
         bd_that['tile_color'].setValue(1717987071)
         # z_order Foundry
-        bd_that['z_order'].setValue(0)
+        bd_that['z_order'].setValue(zOrderFoundry(bd_that))
         # z_order Alt
         #bd_that['z_order'].setValue(-250000)
         bd_that.showControlPanel()
@@ -229,10 +228,7 @@ def coverSelectedArea():
         bd_this.setSelected(True)
 
         # z_order Foundry
-        if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            pass
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
 
         # z_order Alt
         # if nuke.selectedNodes('BackdropNode'):
@@ -285,10 +281,7 @@ def extendSelectedArea():
         bd_this.setSelected(True)
 
         # z_order Foundry
-        if nuke.selectedNodes('BackdropNode'):
-            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
-        else:
-            pass
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
 
         # z_order Alt
         # if nuke.selectedNodes('BackdropNode'):
@@ -425,6 +418,7 @@ def upleft500():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## up500
@@ -432,6 +426,7 @@ def up500():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upright500
@@ -440,6 +435,7 @@ def upright500():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upleft100
@@ -449,6 +445,7 @@ def upleft100():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## up100
@@ -456,6 +453,7 @@ def up100():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upright100
@@ -464,6 +462,7 @@ def upright100():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## left500
@@ -471,6 +470,7 @@ def left500():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## left100
@@ -478,6 +478,7 @@ def left100():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## center
@@ -489,18 +490,21 @@ def center():
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## right100
 def right100():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## right500
 def right500():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downleft100
@@ -509,12 +513,14 @@ def downleft100():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## down100
 def down100():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downright100
@@ -522,6 +528,7 @@ def downright100():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downleft500
@@ -530,12 +537,14 @@ def downleft500():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## down500
 def down500():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downright500
@@ -543,6 +552,7 @@ def downright500():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ### DOWNSCALE ###
@@ -554,6 +564,7 @@ def upleft500_2():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## up500_2
@@ -561,6 +572,7 @@ def up500_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upright500_2
@@ -569,6 +581,7 @@ def upright500_2():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upleft100_2
@@ -578,6 +591,7 @@ def upleft100_2():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## up100_2
@@ -585,6 +599,7 @@ def up100_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## upright100_2
@@ -593,6 +608,7 @@ def upright100_2():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## left500_2
@@ -600,6 +616,7 @@ def left500_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## left100_2
@@ -607,6 +624,7 @@ def left100_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## center_2
@@ -618,18 +636,21 @@ def center_2():
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## right100_2
 def right100_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## right500_2
 def right500_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downleft100_2
@@ -638,12 +659,14 @@ def downleft100_2():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## down100_2
 def down100_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downright100_2
@@ -651,6 +674,7 @@ def downright100_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downleft500_2
@@ -659,12 +683,14 @@ def downleft500_2():
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## down500_2
 def down500_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 ## downright500_2
@@ -672,6 +698,7 @@ def downright500_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
+    bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
 def openWebsite():

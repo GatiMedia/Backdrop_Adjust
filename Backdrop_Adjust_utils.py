@@ -41,9 +41,7 @@ def zOrderFoundry(node):
         # otherwise (no backdrop in selection) find the nearest backdrop if exists and set the new one in front of it
         nonSelectedBackdropNodes = nuke.allNodes("BackdropNode")
         for nonBackdrop in nodes:
-            print("nonBackdrop is: " + nonBackdrop.name())
             for backdrop in nonSelectedBackdropNodes:
-                print("backdrop is: " + backdrop.name())
                 if nodeIsInside(nonBackdrop, backdrop):
                     zOrderF = max(zOrderF, backdrop.knob("z_order").value() + 1)
     return (zOrderF)

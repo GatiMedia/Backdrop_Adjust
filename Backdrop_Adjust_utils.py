@@ -1,8 +1,8 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
-#  Version: 1.7
-#  Last Updated: 16/11/2022
+#  Version: 1.8
+#  Last Updated: 03/12/2022
 # --------------------------------------------------------------
 
 ## Imports
@@ -12,46 +12,53 @@ import colorsys
 import nukescripts
 import os
 
-######################################
-### FUNCTIONS CREATING ON THE NODE ###
-######################################
+###################################
+### FUNCTIONS CREATING THE NODE ###
+###################################
 
-## Z_order from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
+## Z_order modified but base is from https://learn.foundry.com/nuke/developers/120/pythonreference/nukescripts.autobackdrop-pysrc.html
+def nodeIsInside(node, backdropNode):
+    topLeftNode = [node.xpos(), node.ypos()]
+    topLeftBackDrop = [backdropNode.xpos(), backdropNode.ypos()]
+    bottomRightNode = [node.xpos() + node.screenWidth(), node.ypos() + node.screenHeight()]
+    bottomRightBackdrop = [backdropNode.xpos() + backdropNode.screenWidth(), backdropNode.ypos() + backdropNode.screenHeight()]
+
+    topLeft = (topLeftNode[0] >= topLeftBackDrop[0]) and (topLeftNode[1] >= topLeftBackDrop[1])
+    bottomRight = (bottomRightNode[0] <= bottomRightBackdrop[0]) and (bottomRightNode[1] <= bottomRightBackdrop[1])
+
+    return topLeft and bottomRight
+
 def zOrderFoundry(node):
-
-    sel_bd = nuke.selectedNodes('BackdropNode')
-    def nodeIsInside(node, backdropNode):
-        """Returns true if node geometry is inside backdropNode otherwise returns false"""
-        topLeftNode = [node.xpos(), node.ypos()]
-        topLeftBackDrop = [backdropNode.xpos(), backdropNode.ypos()]
-        bottomRightNode = [node.xpos() + node.screenWidth(), node.ypos() + node.screenHeight()]
-        bottomRightBackdrop = [backdropNode.xpos() + backdropNode.screenWidth(),
-                               backdropNode.ypos() + backdropNode.screenHeight()]
-
-        topLeft = (topLeftNode[0] >= topLeftBackDrop[0]) and (topLeftNode[1] >= topLeftBackDrop[1])
-        bottomRight = (bottomRightNode[0] <= bottomRightBackdrop[0]) and (bottomRightNode[1] <= bottomRightBackdrop[1])
-
-        return topLeft and bottomRight
-
+    selNodes = nuke.selectedNodes()
     zOrderF = 0
-    # if there are backdropNodes selected put the new one immediately behind the farthest one
-    if len(sel_bd):
-        zOrderF = min([node.knob("z_order").value() for node in sel_bd]) - 1
-    else:
-        # otherwise (no backdrop in selection) find the nearest backdrop if exists and set the new one in front of it
-        nonSelectedBackdropNodes = nuke.allNodes("BackdropNode")
-        for nonBackdrop in nodes:
+    selectedBackdropNodes = nuke.selectedNodes("BackdropNode")
+    selectedBackdropNodes.remove(node)
+
+    if len(selectedBackdropNodes):
+        zOrderF = min([node.knob("z_order").value() for node in selectedBackdropNodes]) - 1
+
+    nonSelectedBackdropNodes = []
+    for n in nuke.allNodes("BackdropNode"):
+        if n.isSelected() == False:
+            nonSelectedBackdropNodes.append(n)
+    zOrderF_curr = zOrderF
+    if len(nonSelectedBackdropNodes):
+        for nonBackdrop in selNodes:
             for backdrop in nonSelectedBackdropNodes:
                 if nodeIsInside(nonBackdrop, backdrop):
                     zOrderF = max(zOrderF, backdrop.knob("z_order").value() + 1)
-    return (zOrderF)
+    if not zOrderF_curr == zOrderF:
+        if len(selectedBackdropNodes):
+            for selBD in selectedBackdropNodes:
+                selBD['z_order'].setValue(selBD['z_order'].value()+1)
 
+    return (zOrderF)
 
 def zOrderAlt(node):
     zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
     return (zOrderA)
 
-# Creating PyPanel popup for createBDApopup
+## Creating PyPanel popup for createBDApopup
 class CreateBDAdjust(nukescripts.PythonPanel):
     def __init__(self):
         nukescripts.PythonPanel.__init__(self, 'Create Backdrop_Adjust')
@@ -163,17 +170,18 @@ def create_BD_Adj():
         return (bd_this)
     else:
         #bd_that = nuke.createNode('Backdrop_Adjust')
-        bd_that = nuke.nodePaste(gizmoPath)
-        bd_that['tile_color'].setValue(1717987071)
+        bd_this = nuke.nodePaste(gizmoPath)
+        bd_this['tile_color'].setValue(1717987071)
         # z_order Foundry
-        bd_that['z_order'].setValue(zOrderFoundry(bd_that))
+        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
         # z_order Alt
         #bd_that['z_order'].setValue(-250000)
-        bd_that.showControlPanel()
+        bd_this.showControlPanel()
 
-        return (bd_that)
+        return (bd_this)
 
 
+## Opening BDApopup
 def createBDApopup():
     p = CreateBDAdjust()
     if p.showModalDialog():
@@ -191,7 +199,7 @@ def createBDApopup():
             bd['note'].setValue(taskName)
             bd['tile_color'].setValue(int(taskColor))
         if newNote:
-            bd['note'].setValue(newNote.capitalize())
+            bd['note'].setValue(newNote.upper())
 
 
 ####################################

@@ -32,7 +32,8 @@ def zOrderFoundry(node):
     selNodes = nuke.selectedNodes()
     zOrderF = 0
     selectedBackdropNodes = nuke.selectedNodes("BackdropNode")
-    selectedBackdropNodes.remove(node)
+    if node.isSelected() == True:
+        selectedBackdropNodes.remove(node)
 
     if len(selectedBackdropNodes):
         zOrderF = min([node.knob("z_order").value() for node in selectedBackdropNodes]) - 1

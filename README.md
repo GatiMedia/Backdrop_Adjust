@@ -1,8 +1,8 @@
 #GM_Backdrop_Adjust
 
-LAST UPDATE: 03/12/2022
+LAST UPDATE: 19/09/2023
 
-CURRENT VERSION: 1.8
+CURRENT VERSION: 1.9 (beta)
 
 HOW TO INSTALL:
 1. Unzip the archive

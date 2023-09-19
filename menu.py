@@ -1,8 +1,9 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  BackdropAdjust menu.py
-#  Version: 1.8
-#  Last Updated: 21/11/2022
+#  Version: 1.9
+#  Last Updated: 19/09/2023
+# Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
 ## Imports
@@ -25,3 +26,49 @@ BDA_menu.addCommand('BackdropAdjust(popup)', 'Backdrop_Adjust_utils.createBDApop
 
 ## Add BackdropAdjust(search) the Toolset
 BDA_menu.addCommand('BackdropAdjust(search)', 'Backdrop_Adjust_search.createBDASearchPopup()', shortcut='Ctrl+Shift+b', icon = os.path.join(BDA_path, "icon/bda_icon.png"), index=2)
+
+BDA_menu.addSeparator()
+
+def all_to_fill():
+    for bd in nuke.allNodes('BackdropNode'):
+        try:
+            bd['appearance'].setValue('Fill')
+            bd['appearance_custom'].setValue('Fill')
+        except:
+            pass
+
+def all_to_border():
+    for bd in nuke.allNodes('BackdropNode'):
+        try:
+            bd['appearance'].setValue('Border')
+            bd['appearance_custom'].setValue('Border')
+        except:
+            pass
+
+def sel_to_fill():
+    for bd in nuke.selectedNodes('BackdropNode'):
+        try:
+            bd['appearance'].setValue('Fill')
+            bd['appearance_custom'].setValue('Fill')
+        except:
+            pass
+
+def sel_to_border():
+    for bd in nuke.selectedNodes('BackdropNode'):
+        try:
+            bd['appearance'].setValue('Border')
+            bd['appearance_custom'].setValue('Border')
+        except:
+            pass
+
+## Add all_to_fill() to the Toolset
+BDA_menu.addCommand('All BD to Fill', 'all_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
+
+## Add all_to_fill() to the Toolset
+BDA_menu.addCommand('All BD to Border', 'all_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=4)
+
+## Add all_to_fill() to the Toolset
+BDA_menu.addCommand('Selected BD to Fill', 'sel_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=5)
+
+## Add all_to_fill() to the Toolset
+BDA_menu.addCommand('Selected BD to Border', 'sel_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=6)

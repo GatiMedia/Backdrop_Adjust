@@ -3,7 +3,7 @@
 #  BackdropAdjust menu.py
 #  Version: 1.9
 #  Last Updated: 19/09/2023
-# Last updated by: Attila Gasparetz
+#  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
 ## Imports

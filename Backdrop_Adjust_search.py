@@ -1,8 +1,9 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_search.py
-#  Version: 1.8
-#  Last Updated: 21/11/2022
+#  Version: 1.9
+#  Last Updated: 19/09/2023
+#  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
 ## Imports

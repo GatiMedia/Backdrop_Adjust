@@ -1,8 +1,9 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
-#  Version: 1.8
-#  Last Updated: 03/12/2022
+#  Version: 1.9
+#  Last Updated: 19/09/2023
+#  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
 ## Imports
@@ -32,8 +33,7 @@ def zOrderFoundry(node):
     selNodes = nuke.selectedNodes()
     zOrderF = 0
     selectedBackdropNodes = nuke.selectedNodes("BackdropNode")
-    if node.isSelected() == True:
-        selectedBackdropNodes.remove(node)
+    selectedBackdropNodes.remove(node)
 
     if len(selectedBackdropNodes):
         zOrderF = min([node.knob("z_order").value() for node in selectedBackdropNodes]) - 1
@@ -75,6 +75,9 @@ class CreateBDAdjust(nukescripts.PythonPanel):
         self.tasksKnob = nuke.Enumeration_Knob('tasks', 'Tasks', self.tasks)
         #self.tasksKnob.clearFlag(nuke.STARTLINE)
         self.addKnob(self.tasksKnob)
+
+        self.appearanceKnob = nuke.Enumeration_Knob('appearance', 'Appearance', ['Fill', 'Border'])
+        self.addKnob(self.appearanceKnob)
 
         self.spaceKnob = nuke.Text_Knob('space2', '')
         self.addKnob(self.spaceKnob)
@@ -188,6 +191,7 @@ def createBDApopup():
     if p.showModalDialog():
         newNote = p.noteKnob.value()
         newTask = p.tasksKnob.value()
+        newAppearance = p.appearanceKnob.value()
 
         index = p.tasks.index(newTask) - 1
 
@@ -201,7 +205,8 @@ def createBDApopup():
             bd['tile_color'].setValue(int(taskColor))
         if newNote:
             bd['note'].setValue(newNote.upper())
-
+        bd['appearance'].setValue(newAppearance)
+        bd['appearance_custom'].setValue(newAppearance)
 
 ####################################
 ### FUNCTIONS CALLED ON THE NODE ###

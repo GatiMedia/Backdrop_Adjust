@@ -1,10 +1,13 @@
 BackdropNode {
  inputs 0
  name Backdrop_Adjust1
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == 'appearance_custom':\n    if n\['appearance_custom'].value() == 'Fill':\n        n\['appearance'].setValue('Fill')\n    else:\n        n\['appearance'].setValue('Border')\n"
  label "<p align=\"\[value align]\"><font color=\[value note_color]> \[if \{\[value bold]==true\} \{return <b>\} \{return \"\"\}] \[if \{\[value italian]==true\} \{return <i>\} \{return \"\"\}] \[if \{\[value under]==true\} \{return <u>\} \{return \"\"\}] \[if \{\[value strike]==true\} \{return <s>\} \{return \"\"\}] \[value note]"
  note_font "MS Shell Dlg 2"
- note_font_size 72
+ note_font_size 82
  selected true
+ xpos -30
+ ypos -418
  bdwidth 500
  bdheight 500
  addUserKnob {20 User}
@@ -45,6 +48,7 @@ BackdropNode {
  addUserKnob {22 prep l "<big><font style=\"background-color:#778060;\">&nbsp;<font color=black>Prep</font>&nbsp;" -STARTLINE T "# prep\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2004901888)\nbd\['note'].setValue('PREP')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('Silver')"}
  addUserKnob {22 grain l "<big><font style=\"background-color:#AAAAAA;\">&nbsp;<font color=black>Grain</font>&nbsp;" -STARTLINE T "# grain\n\nbd = nuke.thisNode()\n\nbd\['tile_color'].setValue(2576980479)\nbd\['note'].setValue('GRAIN')\nbd\['note_font_size'].setValue(72)\nbd\['note_color'].setValue('White')"}
  addUserKnob {26 node_color l "<b>Node Color</b>"}
+ addUserKnob {4 appearance_custom l Appearance M {Fill Border "" ""}}
  addUserKnob {22 change_colors l "<big><font style=\"background-color:#806060;\">D<font style=\"background-color:#807460;\">u<font style=\"background-color:#778060;\">l<font style=\"background-color:#608071;\">l<font style=\"background-color:#607a80;\"> <font style=\"background-color:#606680;\">C<font style=\"background-color:#606680;\">o<font style=\"background-color:#6d6080;\">l<font style=\"background-color:#80607d;\">o<font style=\"background-color:#806069;\">r<font style=\"background-color:#806060;\">s" t "By clicking on it can toggle between the \"Dull Colors\" and the \"Vivid Colors\" palettes" T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.dullVividColor()" +STARTLINE}
  addUserKnob {22 darken l "<big><font style=\"background-color:#333333;\">&nbsp;<font color=#cccccc>Darken</font>&nbsp;" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.darkenTileColor()"}
  addUserKnob {22 brighten l "<big><font style=\"background-color:#aaaaaa;\">&nbsp;<font color=black>Brighten</font>&nbsp;" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.brightenTileColor()"}
@@ -119,7 +123,7 @@ BackdropNode {
  addUserKnob {22 downright500_2 l "<font color=LightSkyBlue><big>↖" -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.downright500_2()"}
  addUserKnob {20 endGroup n -1}
  addUserKnob {26 ""}
- addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.8 version</font>"}
+ addUserKnob {26 TEXT l "" -STARTLINE T "<font color=#808080 size=\"5\" >1.9 version</font>"}
  addUserKnob {26 _2 l "" -STARTLINE T "   "}
  addUserKnob {22 info l Tutorial/Info -STARTLINE T "import Backdrop_Adjust_utils\n\nBackdrop_Adjust_utils.openWebsite()"}
  addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#808080 size=\"2\">Backdrop_Adjust by Attila Gasparetz</font>"}

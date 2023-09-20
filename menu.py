@@ -1,7 +1,7 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  BackdropAdjust menu.py
-#  Version: 1.9
+#  Version: 1.9 (beta)
 #  Last Updated: 19/09/2023
 #  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------

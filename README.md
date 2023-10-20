@@ -4,7 +4,7 @@ LAST UPDATE: 19/09/2023
 
 CURRENT VERSION: 1.9 (beta)
 
-[TOOL INFO AND TUTORIAL]([https://support.foundry.com/hc/en-us/articles/207271649-Q100048-Nuke-Directory-Locations](https://www.gatimedia.co.uk/backdrop-adjust))
+[TOOL INFO AND TUTORIAL](https://www.gatimedia.co.uk/backdrop-adjust)
 
 HOW TO INSTALL:
 1. Unzip the archive

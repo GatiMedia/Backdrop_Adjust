@@ -1,8 +1,8 @@
 #GM_Backdrop_Adjust
 
-LAST UPDATE: 19/09/2023
+LAST UPDATE: 28/08/2024
 
-CURRENT VERSION: 1.9 (beta)
+CURRENT VERSION: 2.0
 
 [TOOL INFO AND TUTORIAL](https://www.gatimedia.co.uk/backdrop-adjust)
 

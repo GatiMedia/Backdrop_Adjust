@@ -65,16 +65,16 @@ def sel_to_border():
 BDA_appearance_menu = BDA_menu.addMenu('Appearance', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
 
 ## Add all_to_fill() to the Toolset
-BDA_appearance_menu.addCommand('All BD to Fill', 'all_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
+BDA_appearance_menu.addCommand('All BD to Fill', 'all_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=0)
 
 ## Add all_to_fill() to the Toolset
-BDA_appearance_menu.addCommand('All BD to Border', 'all_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=4)
+BDA_appearance_menu.addCommand('All BD to Border', 'all_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=1)
 
 ## Add all_to_fill() to the Toolset
-BDA_appearance_menu.addCommand('Selected BD to Fill', 'sel_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=5)
+BDA_appearance_menu.addCommand('Selected BD to Fill', 'sel_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=2)
 
 ## Add all_to_fill() to the Toolset
-BDA_appearance_menu.addCommand('Selected BD to Border', 'sel_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=6)
+BDA_appearance_menu.addCommand('Selected BD to Border', 'sel_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
 
 BDA_advenced_menu = BDA_menu.addMenu('Advanced', icon='Modify.png', index=4)
 

@@ -1,8 +1,8 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  BackdropAdjust menu.py
-#  Version: 1.9 (beta)
-#  Last Updated: 19/09/2023
+#  Version: 2.0
+#  Last Updated: 27/08/2024
 #  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
@@ -11,6 +11,7 @@ import nuke
 import os
 import Backdrop_Adjust_utils
 import Backdrop_Adjust_search
+import Backdrop_Adjust_advanced
 
 ## Current file path for the icons
 BDA_path = os.path.dirname(__file__)
@@ -61,14 +62,24 @@ def sel_to_border():
         except:
             pass
 
-## Add all_to_fill() to the Toolset
-BDA_menu.addCommand('All BD to Fill', 'all_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
+BDA_appearance_menu = BDA_menu.addMenu('Appearance', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
 
 ## Add all_to_fill() to the Toolset
-BDA_menu.addCommand('All BD to Border', 'all_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=4)
+BDA_appearance_menu.addCommand('All BD to Fill', 'all_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=3)
 
 ## Add all_to_fill() to the Toolset
-BDA_menu.addCommand('Selected BD to Fill', 'sel_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=5)
+BDA_appearance_menu.addCommand('All BD to Border', 'all_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=4)
 
 ## Add all_to_fill() to the Toolset
-BDA_menu.addCommand('Selected BD to Border', 'sel_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=6)
+BDA_appearance_menu.addCommand('Selected BD to Fill', 'sel_to_fill()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=5)
+
+## Add all_to_fill() to the Toolset
+BDA_appearance_menu.addCommand('Selected BD to Border', 'sel_to_border()', icon = os.path.join(BDA_path, "icon/bda_icon_3.png"), index=6)
+
+BDA_advenced_menu = BDA_menu.addMenu('Advanced', icon='Modify.png', index=4)
+
+## Add convertToNativeBD to the Advanced menu
+BDA_advenced_menu.addCommand('Convert BackdropAdjust to BackdropNode', 'Backdrop_Adjust_advanced.convertToNativeBD()', index=1)
+
+## Add convertToBDAdjust to the Advanced menu
+BDA_advenced_menu.addCommand('Convert BackdropNode to BackdropAdjust', 'Backdrop_Adjust_advanced.convertToBDAdjust()', index=2)

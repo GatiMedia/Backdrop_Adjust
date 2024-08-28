@@ -1,8 +1,8 @@
 #encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
-#  Version: 1.9 (beta)
-#  Last Updated: 19/09/2023
+#  Version: 2.0
+#  Last Updated: 26/08/2024
 #  Last updated by: Attila Gasparetz
 # --------------------------------------------------------------
 
@@ -33,7 +33,7 @@ def zOrderFoundry(node):
     selNodes = nuke.selectedNodes()
     zOrderF = 0
     selectedBackdropNodes = nuke.selectedNodes("BackdropNode")
-    selectedBackdropNodes.remove(node)
+    #selectedBackdropNodes.remove(node)
 
     if len(selectedBackdropNodes):
         zOrderF = min([node.knob("z_order").value() for node in selectedBackdropNodes]) - 1
@@ -313,12 +313,18 @@ def fontPlusTen():
     else:
         pass
 
+def fontMax():
+    nuke.thisNode()['note_font_size'].setValue(200)
+
 def fontMinusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
     if curr_size > 192:
         nuke.thisNode()['note_font_size'].setValue(182)
     else:
         nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
+
+def fontDefault():
+    nuke.thisNode()['note_font_size'].setValue(82)
 
 ## Vivid/Dull palette knob
 def dullVividColor():

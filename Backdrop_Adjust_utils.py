@@ -174,14 +174,24 @@ def create_BD_Adj():
         return (bd_this)
     else:
         #bd_that = nuke.createNode('Backdrop_Adjust')
-        bd_this = nuke.nodePaste(gizmoPath)
-        bd_this['tile_color'].setValue(1717987071)
+        #bd_this = nuke.nodePaste(gizmoPath)
+        bd_this = nuke.nodes.Backdrop_Adjust()
+        try:
+            # Get mouse position
+            mouse = nuke.createNode("NoOp")
+            x, y = (mouse.xpos(), mouse.ypos())
+            nuke.delete(mouse)
+
+            bd_this['tile_color'].setValue(1717987071)
+            bd_this['z_order'].setValue(zOrderFoundry(bd_this))
+            bd_this.setXYpos(x - 170, y - 240)
+            bd_this.showControlPanel()
+        except:
+            pass
         # z_order Foundry
-        bd_this['z_order'].setValue(zOrderFoundry(bd_this))
         # z_order Alt
         #bd_that['z_order'].setValue(-250000)
-        bd_this.showControlPanel()
-
+        
         return (bd_this)
 
 

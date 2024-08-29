@@ -1,4 +1,4 @@
-#encoding=utf-8
+# encoding=utf-8
 # --------------------------------------------------------------
 #  Backdrop_Adjust_utils.py
 #  Version: 2.0
@@ -13,6 +13,7 @@ import colorsys
 import nukescripts
 import os
 
+
 ###################################
 ### FUNCTIONS CREATING THE NODE ###
 ###################################
@@ -22,18 +23,20 @@ def nodeIsInside(node, backdropNode):
     topLeftNode = [node.xpos(), node.ypos()]
     topLeftBackDrop = [backdropNode.xpos(), backdropNode.ypos()]
     bottomRightNode = [node.xpos() + node.screenWidth(), node.ypos() + node.screenHeight()]
-    bottomRightBackdrop = [backdropNode.xpos() + backdropNode.screenWidth(), backdropNode.ypos() + backdropNode.screenHeight()]
+    bottomRightBackdrop = [backdropNode.xpos() + backdropNode.screenWidth(),
+                           backdropNode.ypos() + backdropNode.screenHeight()]
 
     topLeft = (topLeftNode[0] >= topLeftBackDrop[0]) and (topLeftNode[1] >= topLeftBackDrop[1])
     bottomRight = (bottomRightNode[0] <= bottomRightBackdrop[0]) and (bottomRightNode[1] <= bottomRightBackdrop[1])
 
     return topLeft and bottomRight
 
+
 def zOrderFoundry(node):
     selNodes = nuke.selectedNodes()
     zOrderF = 0
     selectedBackdropNodes = nuke.selectedNodes("BackdropNode")
-    #selectedBackdropNodes.remove(node)
+    # selectedBackdropNodes.remove(node)
 
     if len(selectedBackdropNodes):
         zOrderF = min([node.knob("z_order").value() for node in selectedBackdropNodes]) - 1
@@ -51,13 +54,15 @@ def zOrderFoundry(node):
     if not zOrderF_curr == zOrderF:
         if len(selectedBackdropNodes):
             for selBD in selectedBackdropNodes:
-                selBD['z_order'].setValue(selBD['z_order'].value()+1)
+                selBD['z_order'].setValue(selBD['z_order'].value() + 1)
 
     return (zOrderF)
+
 
 def zOrderAlt(node):
     zOrderA = node["bdwidth"].getValue() * node["bdheight"].getValue() * -1
     return (zOrderA)
+
 
 ## Creating PyPanel popup for createBDApopup
 class CreateBDAdjust(nukescripts.PythonPanel):
@@ -71,9 +76,12 @@ class CreateBDAdjust(nukescripts.PythonPanel):
         self.noteKnob = nuke.EvalString_Knob('note', 'Label/Note')
         self.addKnob(self.noteKnob)
 
-        self.tasks = ['none', 'Plate/green', 'Denoise/olive', 'Reference/teal', 'Precomp/red', 'Merge/aqua', 'Output/brown', 'FG/grey', 'BG/grey', 'Versions/grey', '3d/red', 'Camera/maroon', 'Track/purple', 'DMP/brown', 'Grade/blue', 'Lens Effect/purple', 'Key/teal', 'Roto/green', 'Prep/olive', 'Grain/white']
+        self.tasks = ['none', 'Plate/green', 'Denoise/olive', 'Reference/teal', 'Precomp/red', 'Merge/aqua',
+                      'Output/brown', 'FG/grey', 'BG/grey', 'Versions/grey', '3d/red', 'Camera/maroon', 'Track/purple',
+                      'DMP/brown', 'Grade/blue', 'Lens Effect/purple', 'Key/teal', 'Roto/green', 'Prep/olive',
+                      'Grain/white']
         self.tasksKnob = nuke.Enumeration_Knob('tasks', 'Tasks', self.tasks)
-        #self.tasksKnob.clearFlag(nuke.STARTLINE)
+        # self.tasksKnob.clearFlag(nuke.STARTLINE)
         self.addKnob(self.tasksKnob)
 
         self.appearanceKnob = nuke.Enumeration_Knob('appearance', 'Appearance', ['Fill', 'Border'])
@@ -88,6 +96,7 @@ class CreateBDAdjust(nukescripts.PythonPanel):
 
         self.spaceKnob = nuke.Text_Knob('space3', '')
         self.addKnob(self.spaceKnob)
+
 
 ## The main function
 def create_BD_Adj():
@@ -112,7 +121,7 @@ def create_BD_Adj():
 
         # Creating the node
         bd_this = nuke.nodes.Backdrop_Adjust()
-        #bd_this = nuke.nodePaste(gizmoPath)
+        # bd_this = nuke.nodePaste(gizmoPath)
         bd_this["xpos"].setValue(bdX)
         bd_this["bdwidth"].setValue(bdW)
         bd_this["ypos"].setValue(bdY)
@@ -169,12 +178,13 @@ def create_BD_Adj():
 
         for n in bd_this.getNodes():
             n.setSelected(True)
+        bd_this.setSelected(True)
 
         bd_this.showControlPanel()
         return (bd_this)
     else:
-        #bd_that = nuke.createNode('Backdrop_Adjust')
-        #bd_this = nuke.nodePaste(gizmoPath)
+        # bd_that = nuke.createNode('Backdrop_Adjust')
+        # bd_this = nuke.nodePaste(gizmoPath)
         bd_this = nuke.nodes.Backdrop_Adjust()
         try:
             # Get mouse position
@@ -185,13 +195,16 @@ def create_BD_Adj():
             bd_this['tile_color'].setValue(1717987071)
             bd_this['z_order'].setValue(zOrderFoundry(bd_this))
             bd_this.setXYpos(x - 170, y - 240)
+            for n in bd_this.getNodes():
+                n.setSelected(True)
             bd_this.showControlPanel()
+            bd_this.setSelected(True)
         except:
             pass
         # z_order Foundry
         # z_order Alt
-        #bd_that['z_order'].setValue(-250000)
-        
+        # bd_that['z_order'].setValue(-250000)
+
         return (bd_this)
 
 
@@ -205,9 +218,14 @@ def createBDApopup():
 
         index = p.tasks.index(newTask) - 1
 
-        taskColor = ['1436110080', '2241416448', '1301902848', '2571985664', '1301059840', '2575125760', '1717987071', '1717987071', '1717987071', '2153801984', '2153799680', '2153807104', '2155110400', '1618640896', '1835040768', '1619030272', '1669357568', '2004901888', '2576980479'][index]
+        taskColor = \
+        ['1436110080', '2241416448', '1301902848', '2571985664', '1301059840', '2575125760', '1717987071', '1717987071',
+         '1717987071', '2153801984', '2153799680', '2153807104', '2155110400', '1618640896', '1835040768', '1619030272',
+         '1669357568', '2004901888', '2576980479'][index]
 
-        taskName = ['PLATE', 'DENOISE', 'REF', 'PRECOMP', 'MERGE', 'OUTPUT', 'FG', 'BG', 'VERSIONS', '3D', 'CAMERA', 'TRACK', 'DMP', 'GRADE', 'LENS\nEFFECT', 'KEY', 'ROTO', 'PREP', 'GRAIN'][index]
+        taskName = \
+        ['PLATE', 'DENOISE', 'REF', 'PRECOMP', 'MERGE', 'OUTPUT', 'FG', 'BG', 'VERSIONS', '3D', 'CAMERA', 'TRACK',
+         'DMP', 'GRADE', 'LENS\nEFFECT', 'KEY', 'ROTO', 'PREP', 'GRAIN'][index]
 
         bd = create_BD_Adj()
         if not newTask == "none":
@@ -217,6 +235,7 @@ def createBDApopup():
             bd['note'].setValue(newNote.upper())
         bd['appearance'].setValue(newAppearance)
         bd['appearance_custom'].setValue(newAppearance)
+
 
 ####################################
 ### FUNCTIONS CALLED ON THE NODE ###
@@ -262,6 +281,7 @@ def coverSelectedArea():
             n.setSelected(True)
     else:
         nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
+
 
 ## Extend selected nodes' area
 def extendSelectedArea():
@@ -316,15 +336,18 @@ def extendSelectedArea():
     else:
         nuke.message('<font color=orange><b>\n\nSelect some nodes first!\n\n')
 
+
 def fontPlusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
     if curr_size < 192:
-       nuke.thisNode()['note_font_size'].setValue(curr_size + 10)
+        nuke.thisNode()['note_font_size'].setValue(curr_size + 10)
     else:
         pass
 
+
 def fontMax():
     nuke.thisNode()['note_font_size'].setValue(200)
+
 
 def fontMinusTen():
     curr_size = nuke.thisNode()['note_font_size'].value()
@@ -333,8 +356,10 @@ def fontMinusTen():
     else:
         nuke.thisNode()['note_font_size'].setValue(curr_size - 10)
 
+
 def fontDefault():
     nuke.thisNode()['note_font_size'].setValue(82)
+
 
 ## Vivid/Dull palette knob
 def dullVividColor():
@@ -371,6 +396,7 @@ def dullVividColor():
         node[knob_names[i]].setLabel("<font color=#{}><big>█</big></font>".format(hex_color))
         node[knob_names[i]].setValue("nuke.thisNode()['tile_color'].setValue({})".format(color))
 
+
 ## Darken tile_color
 def darkenTileColor():
     # getting tile_color value
@@ -399,6 +425,7 @@ def darkenTileColor():
 
     # applying new tile_color
     nuke.thisNode()['tile_color'].setValue(nukeHex)
+
 
 ## Brighten tile_color
 def brightenTileColor():
@@ -429,6 +456,7 @@ def brightenTileColor():
     # applying new tile_color
     nuke.thisNode()['tile_color'].setValue(nukeHex)
 
+
 def newSelection():
     bd_this = nuke.thisNode()
     for n in nuke.allNodes():
@@ -436,6 +464,7 @@ def newSelection():
     for n in bd_this.getNodes():
         n.setSelected(True)
     bd_this.setSelected(True)
+
 
 ### UPSCALE ###
 
@@ -449,6 +478,7 @@ def upleft500():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## up500
 def up500():
     bd_this = nuke.thisNode()
@@ -456,6 +486,7 @@ def up500():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upright500
 def upright500():
@@ -465,6 +496,7 @@ def upright500():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upleft100
 def upleft100():
@@ -476,6 +508,7 @@ def upleft100():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## up100
 def up100():
     bd_this = nuke.thisNode()
@@ -483,6 +516,7 @@ def up100():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) - 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upright100
 def upright100():
@@ -493,6 +527,7 @@ def upright100():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## left500
 def left500():
     bd_this = nuke.thisNode()
@@ -501,6 +536,7 @@ def left500():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## left100
 def left100():
     bd_this = nuke.thisNode()
@@ -508,6 +544,7 @@ def left100():
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) - 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## center
 def center():
@@ -521,6 +558,7 @@ def center():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## right100
 def right100():
     bd_this = nuke.thisNode()
@@ -528,12 +566,14 @@ def right100():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## right500
 def right500():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downleft100
 def downleft100():
@@ -544,12 +584,14 @@ def downleft100():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## down100
 def down100():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downright100
 def downright100():
@@ -558,6 +600,7 @@ def downright100():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downleft500
 def downleft500():
@@ -568,12 +611,14 @@ def downleft500():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## down500
 def down500():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) + 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downright500
 def downright500():
@@ -582,6 +627,7 @@ def downright500():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) + 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ### DOWNSCALE ###
 
@@ -595,6 +641,7 @@ def upleft500_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## up500_2
 def up500_2():
     bd_this = nuke.thisNode()
@@ -602,6 +649,7 @@ def up500_2():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upright500_2
 def upright500_2():
@@ -611,6 +659,7 @@ def upright500_2():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upleft100_2
 def upleft100_2():
@@ -622,6 +671,7 @@ def upleft100_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## up100_2
 def up100_2():
     bd_this = nuke.thisNode()
@@ -629,6 +679,7 @@ def up100_2():
     bd_this['ypos'].setValue(int(bd_this['ypos'].value()) + 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## upright100_2
 def upright100_2():
@@ -639,6 +690,7 @@ def upright100_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## left500_2
 def left500_2():
     bd_this = nuke.thisNode()
@@ -647,6 +699,7 @@ def left500_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## left100_2
 def left100_2():
     bd_this = nuke.thisNode()
@@ -654,6 +707,7 @@ def left100_2():
     bd_this['xpos'].setValue(int(bd_this['xpos'].value()) + 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## center_2
 def center_2():
@@ -667,6 +721,7 @@ def center_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## right100_2
 def right100_2():
     bd_this = nuke.thisNode()
@@ -674,12 +729,14 @@ def right100_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## right500_2
 def right500_2():
     bd_this = nuke.thisNode()
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downleft100_2
 def downleft100_2():
@@ -690,12 +747,14 @@ def downleft100_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## down100_2
 def down100_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downright100_2
 def downright100_2():
@@ -704,6 +763,7 @@ def downright100_2():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 100)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downleft500_2
 def downleft500_2():
@@ -714,12 +774,14 @@ def downleft500_2():
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
 
+
 ## down500_2
 def down500_2():
     bd_this = nuke.thisNode()
     bd_this['bdheight'].setValue(int(bd_this['bdheight'].value()) - 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 ## downright500_2
 def downright500_2():
@@ -728,6 +790,7 @@ def downright500_2():
     bd_this['bdwidth'].setValue(int(bd_this['bdwidth'].value()) - 500)
     bd_this['z_order'].setValue(zOrderFoundry(bd_this))
     newSelection()
+
 
 def openWebsite():
     webbrowser.open('https://www.gatimedia.co.uk/backdrop-adjust', new=2)

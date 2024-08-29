@@ -3,7 +3,6 @@ BackdropNode {
  name Backdrop_Adjust1
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == 'appearance_custom':\n    if n\['appearance_custom'].value() == 'Fill':\n        n\['appearance'].setValue('Fill')\n    else:\n        n\['appearance'].setValue('Border')\n"
  label "<p align=\"\[value align]\"><font color=\[value note_color]> \[if \{\[value bold]==true\} \{return <b>\} \{return \"\"\}] \[if \{\[value italian]==true\} \{return <i>\} \{return \"\"\}] \[if \{\[value under]==true\} \{return <u>\} \{return \"\"\}] \[if \{\[value strike]==true\} \{return <s>\} \{return \"\"\}] \[value note]"
- note_font "MS Shell Dlg 2"
  note_font_size 82
  bdwidth 500
  bdheight 500
